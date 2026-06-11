@@ -152,7 +152,10 @@ table tbody tr:hover { background: #e6f7ff; }
 /* 标签 */
 .tag { display: inline-block; padding: 2px 8px; border-radius: 2px; font-size: 12px; }
 .tag-success { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+.tag-blue { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+.tag-warning { background: #fff7e6; color: #fa8c16; border: 1px solid #ffd591; }
 .tag-default { background: #fafafa; color: #999; border: 1px solid #d9d9d9; }
+.tag-error { background: #fff2f0; color: #ff4d4f; border: 1px solid #ffccc7; }
 
 /* 底部合计 */
 .table-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding: 8px 0; font-size: 13px; color: #666; }
@@ -402,13 +405,18 @@ table tbody tr:hover { background: #e6f7ff; }
                   <label>状态</label>
                   <select style="height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px;" id="promoFilterStatus">
                     <option value="">全部</option>
-                    <option value="启用">启用</option>
+                    <option value="待执行">待执行</option>
+                    <option value="执行中">执行中</option>
+                    <option value="已完成">已完成</option>
                     <option value="禁用">禁用</option>
+                    <option value="已暂停">已暂停</option>
+                    <option value="已过期">已过期</option>
                   </select>
                 </div>
                 <div class="form-actions">
                   <button class="btn btn-primary" onclick="filterPromotions()">🔍 查询</button>
-                  <button class="btn" style="margin:0 12px;" onclick="resetPromoFilter()">🔄 重置</button>
+                  <button class="btn" style="margin:0 4px;" onclick="resetPromoFilter()">🔄 重置</button>
+                  <button class="btn" style="margin:0 4px;" onclick="refreshPromotions()">🔃 刷新</button>
                   <button class="btn btn-green" onclick="openPromoModal()">＋ 新增</button>
                 </div>
               </div>
@@ -1130,6 +1138,39 @@ function savePromotion() {
   renderPromoTable();
 }
 
+// 计算活动展示状态
+function getPromoDisplayStatus(p) {
+  var now = new Date();
+  var start = p.startDate ? new Date(p.startDate) : null;
+  var end = p.endDate ? new Date(p.endDate) : null;
+  if (p.status === '启用') {
+    if (start && now < start) return '待执行';
+    if (start && end && now >= start && now <= end) return '执行中';
+    if (end && now > end) return '已完成';
+    return '执行中';
+  } else {
+    if (start && end && now >= start && now <= end) return '已暂停';
+    if (end && now > end) return '已过期';
+    return '禁用';
+  }
+}
+
+// 获取状态 tag class
+function getStatusTagClass(status) {
+  if (status === '执行中') return 'tag-success';
+  if (status === '待执行') return 'tag-blue';
+  if (status === '已完成') return 'tag-default';
+  if (status === '已暂停') return 'tag-warning';
+  if (status === '已过期') return 'tag-error';
+  return 'tag-default';
+}
+
+// 刷新活动数据
+function refreshPromotions() {
+  renderPromoTable();
+  showToast('活动数据已刷新');
+}
+
 // 渲染活动表格
 function renderPromoTable(filterText, filterStart, filterEnd, filterStatus) {
   var filtered = promotions.slice();
@@ -1145,7 +1186,7 @@ function renderPromoTable(filterText, filterStart, filterEnd, filterStatus) {
     filtered = filtered.filter(function(p) { return p.endDate <= filterEnd; });
   }
   if (filterStatus) {
-    filtered = filtered.filter(function(p) { return p.status === filterStatus; });
+    filtered = filtered.filter(function(p) { return getPromoDisplayStatus(p) === filterStatus; });
   }
 
   var tbody = document.getElementById('promoTableBody');
@@ -1164,7 +1205,8 @@ function renderPromoTable(filterText, filterStart, filterEnd, filterStatus) {
       html += '<td>' + (p.startDate ? p.startDate.replace('T', ' ') : '') + '</td>';
       html += '<td>' + (p.endDate ? p.endDate.replace('T', ' ') : '') + '</td>';
       html += '<td>' + p.createTime + '</td>';
-      html += '<td><span class="tag ' + (p.status === '启用' ? 'tag-success' : 'tag-default') + '">' + p.status + '</span></td>';
+      var ds = getPromoDisplayStatus(p);
+      html += '<td><span class="tag ' + getStatusTagClass(ds) + '">' + ds + '</span></td>';
       html += '</tr>';
     }
     tbody.innerHTML = html;
