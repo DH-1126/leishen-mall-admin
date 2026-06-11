@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>雷神商城 · 游戏交易管理后台</title>
+<style>
+html, body { height: 100%; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; background: #f0f2f5; }
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #f6f6f6; border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: #cdcdcd; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #747474; }
+::-webkit-scrollbar-corner { background: #f6f6f6; }
+
+/* 布局 */
+.layout { display: flex; min-height: 100vh; }
+.sider { width: 230px; min-width: 230px; max-width: 230px; background: #001529; color: #fff; flex-shrink: 0; }
+.main-layout { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+/* 侧边栏 */
+.logo { padding: 16px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.logo a { display: flex; align-items: center; justify-content: center; text-decoration: none; color: #fff; }
+.logo img { width: 32px; height: 32px; margin-right: 8px; }
+.logo h1 { font-size: 16px; color: #fff; margin: 0; font-weight: 600; white-space: nowrap; }
+.logo .nav-search { margin-top: 12px; position: relative; }
+.logo .nav-search input { width: 100%; height: 32px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 0 8px; color: #fff; font-size: 13px; box-sizing: border-box; }
+.logo .nav-search input::placeholder { color: rgba(255,255,255,0.4); }
+
+/* 菜单 */
+.sider-menu { background: #001529; padding: 0; }
+.menu-item, .submenu-title { display: flex; align-items: center; padding: 12px 24px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.3s; font-size: 14px; user-select: none; }
+.menu-item:hover, .submenu-title:hover { color: #fff; background: rgba(255,255,255,0.08); }
+.menu-item.active { color: #fff; background: #1890ff; }
+.submenu-title { justify-content: space-between; }
+.submenu-title .arrow { font-size: 10px; transition: transform 0.3s; }
+.submenu-title .arrow.open { transform: rotate(90deg); }
+.submenu-icon { margin-right: 10px; font-size: 14px; width: 14px; text-align: center; display: inline-block; }
+.submenu-children { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+.submenu-children.open { max-height: 200px; }
+.submenu-children .menu-item { padding-left: 48px; }
+
+/* 顶部栏 */
+.header { display: flex; align-items: center; justify-content: space-between; height: 48px; background: #fff; padding: 0 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.header-left { display: flex; align-items: center; }
+.trigger { font-size: 18px; padding: 0 12px; cursor: pointer; color: #333; }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.user-info { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #333; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: #1890ff; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; }
+.logout { color: #666; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+
+/* 标签页 */
+.tabs-bar { display: flex; align-items: center; height: 40px; background: #f0f2f5; border-bottom: 1px solid #e8e8e8; padding: 0 8px; overflow-x: auto; }
+.tab-item { padding: 6px 16px; margin: 0 2px; border-radius: 4px 4px 0 0; cursor: pointer; font-size: 13px; color: #666; background: #e8e8e8; display: flex; align-items: center; gap: 8px; white-space: nowrap; flex-shrink: 0; }
+.tab-item.active { color: #1890ff; background: #fff; }
+.tab-close { font-size: 10px; opacity: 0.5; cursor: pointer; }
+.tab-close:hover { opacity: 1; }
+
+/* 内容区 */
+.content { margin: 12px; flex: 1; }
+.page { display: none; }
+.page.active { display: block; }
+.card { background: #fff; border-radius: 2px; padding: 24px; }
+.search-form { margin-bottom: 16px; }
+.form-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
+.form-item { display: flex; flex-direction: column; gap: 4px; }
+.form-item label { font-size: 13px; color: #666; }
+.form-item input { height: 32px; border: 1px solid #d9d9d9; border-radius: 4px; padding: 0 11px; font-size: 13px; width: 200px; box-sizing: border-box; }
+.form-item input:focus { border-color: #1890ff; outline: none; box-shadow: 0 0 0 2px rgba(24,144,255,0.2); }
+.form-actions { display: flex; gap: 8px; align-items: flex-end; padding-bottom: 0; }
+
+/* 按钮 */
+.btn { height: 32px; padding: 0 15px; border-radius: 4px; font-size: 13px; cursor: pointer; border: 1px solid #d9d9d9; background: #fff; color: #333; display: inline-flex; align-items: center; gap: 4px; transition: all 0.3s; white-space: nowrap; }
+.btn:hover { color: #1890ff; border-color: #1890ff; }
+.btn-primary { background: #1890ff; border-color: #1890ff; color: #fff; }
+.btn-primary:hover { background: #40a9ff; border-color: #40a9ff; color: #fff; }
+.btn-green { background: #52c41a; border-color: #52c41a; color: #fff; }
+.btn-green:hover { background: #73d13d; border-color: #73d13d; color: #fff; }
+
+/* 日期范围 */
+.date-range { display: flex; align-items: center; gap: 4px; }
+.date-range input { width: 110px; }
+.date-range .sep { color: #999; font-size: 12px; }
+
+/* 表格 */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+table th { background: #fafafa; padding: 10px 12px; text-align: center; border: 1px solid #e8e8e8; color: #666; font-weight: 500; white-space: nowrap; }
+table td { padding: 10px 12px; text-align: center; border: 1px solid #e8e8e8; }
+table tbody tr:hover { background: #e6f7ff; }
+.table-actions a { color: #1890ff; cursor: pointer; text-decoration: none; }
+.table-actions a:hover { color: #40a9ff; }
+.table-actions .divider { color: #e8e8e8; margin: 0 6px; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 2px; font-size: 12px; background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+
+/* 分页 */
+.pagination { display: flex; align-items: center; justify-content: flex-end; margin-top: 16px; gap: 4px; font-size: 13px; }
+.pagination .page-btn { min-width: 28px; height: 28px; border: 1px solid #d9d9d9; border-radius: 4px; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; padding: 0 6px; }
+.pagination .page-btn.active { background: #1890ff; border-color: #1890ff; color: #fff; }
+.pagination .page-btn:disabled { color: #d9d9d9; cursor: not-allowed; background: #f5f5f5; }
+.pagination .total { color: #666; margin-right: 12px; }
+.pagination .page-size { margin-left: 12px; color: #666; }
+
+/* 面包屑/标题 */
+.page-title { font-size: 14px; color: #333; margin-bottom: 12px; font-weight: 500; }
+
+/* 页脚 */
+.footer { text-align: center; padding: 12px; color: #999; font-size: 12px; }
+
+/* 当前供应商标签 */
+.supplier-tag { display: inline-block; padding: 2px 8px; background: #e6f7ff; border: 1px solid #91d5ff; border-radius: 2px; color: #1890ff; font-size: 12px; margin-left: 8px; }
+
+/* 弹窗遮罩 */
+.modal-mask { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); z-index: 1000; display: flex; align-items: flex-start; justify-content: center; padding-top: 100px; }
+.modal-wrap { background: #fff; border-radius: 4px; width: 560px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid #e8e8e8; }
+.modal-header .modal-title { font-size: 16px; font-weight: 500; color: #333; }
+.modal-close { cursor: pointer; color: #999; font-size: 16px; line-height: 1; }
+.modal-close:hover { color: #333; }
+.modal-body { padding: 24px; }
+.modal-footer { padding: 10px 24px; border-top: 1px solid #e8e8e8; text-align: right; display: flex; justify-content: flex-end; gap: 8px; }
+
+/* 表单行（弹窗内） */
+.modal-form-item { display: flex; align-items: flex-start; margin-bottom: 16px; }
+.modal-form-item .form-label { width: 80px; min-width: 80px; text-align: right; padding-right: 12px; line-height: 32px; font-size: 13px; color: #666; }
+.modal-form-item .form-label.required::before { content: '*'; color: #f5222d; margin-right: 4px; }
+.modal-form-item .form-control { flex: 1; }
+.modal-form-item input[type="text"], .modal-form-item input[type="date"] { height: 32px; border: 1px solid #d9d9d9; border-radius: 4px; padding: 0 11px; font-size: 13px; width: 100%; box-sizing: border-box; }
+.modal-form-item input:focus { border-color: #1890ff; outline: none; box-shadow: 0 0 0 2px rgba(24,144,255,0.2); }
+.modal-form-item select { height: 32px; border: 1px solid #d9d9d9; border-radius: 4px; padding: 0 8px; font-size: 13px; width: 100%; box-sizing: border-box; background: #fff; }
+
+/* 自定义下拉选择 */
+.custom-select { position: relative; }
+.custom-select-trigger { display: flex; align-items: center; justify-content: space-between; height: 32px; border: 1px solid #d9d9d9; border-radius: 4px; padding: 0 11px; font-size: 13px; cursor: pointer; background: #fff; box-sizing: border-box; }
+.custom-select-trigger:hover { border-color: #1890ff; }
+.custom-select-trigger .arrow { font-size: 10px; color: #999; transition: transform 0.3s; }
+.custom-select-trigger .arrow.open { transform: rotate(180deg); }
+.custom-select-dropdown { position: absolute; top: 36px; left: 0; right: 0; background: #fff; border: 1px solid #d9d9d9; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 10; max-height: 200px; overflow-y: auto; display: none; }
+.custom-select-dropdown.show { display: block; }
+.custom-select-dropdown .option { padding: 8px 12px; font-size: 13px; cursor: pointer; display: flex; align-items: center; }
+.custom-select-dropdown .option:hover { background: #f5f5f5; }
+.custom-select-dropdown .option.selected { background: #e6f7ff; color: #1890ff; }
+.custom-select-dropdown .option input[type="checkbox"] { margin-right: 8px; }
+
+/* toast */
+.toast-wrap { position: fixed; top: 60px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; }
+.toast { padding: 10px 24px; background: #fff; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 13px; color: #333; pointer-events: auto; animation: toastIn 0.3s ease; }
+@keyframes toastIn { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 标签 */
+.tag { display: inline-block; padding: 2px 8px; border-radius: 2px; font-size: 12px; }
+.tag-success { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+.tag-default { background: #fafafa; color: #999; border: 1px solid #d9d9d9; }
+
+/* 底部合计 */
+.table-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding: 8px 0; font-size: 13px; color: #666; }
+.summary { font-weight: 500; }
+.summary .num { color: #1890ff; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="layout">
+    <!-- 侧边栏 -->
+    <aside class="sider">
+      <div class="logo">
+        <a href="#">
+          <img src="../素材/货源管理_本地版_files/logo-white.be473d73.png" alt="logo" onerror="this.style.display='none'">
+          <h1>游戏交易管理后台</h1>
+        </a>
+        <div class="nav-search">
+          <input type="text" placeholder="菜单名称">
+        </div>
+      </div>
+
+      <div class="sider-menu">
+        <!-- 首页 -->
+        <div class="menu-item" data-page="home" onclick="switchMenu(this)"><span class="submenu-icon">☁</span>首页</div>
+
+        <!-- 游戏管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">🪪</span>游戏管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 用户管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">👤</span>用户管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 订单管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">📋</span>订单管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 退款管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">💰</span>退款管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 商品管理 (展开) -->
+        <div class="submenu">
+          <div class="submenu-title" onclick="toggleSubmenu(this.parentElement)" style="color:#fff;">
+            <span><span class="submenu-icon">🛒</span>商品管理</span>
+            <span class="arrow open">▶</span>
+          </div>
+          <div class="submenu-children open">
+            <div class="menu-item" data-page="goodsManager" onclick="switchMenu(this)">商品管理</div>
+            <div class="menu-item active" data-page="supplierList" onclick="switchMenu(this)">供货商管理</div>
+            <div class="menu-item" data-page="goodsType" onclick="switchMenu(this)">商品分类</div>
+            <div class="menu-item" data-page="supplierPromotion" onclick="switchMenu(this)">供货商活动推广</div>
+          </div>
+        </div>
+
+        <!-- 支付渠道配置 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">💳</span>支付渠道配置</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 帮助中心 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">📡</span>帮助中心</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 广告位管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">💡</span>广告位管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 权限管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">⚙</span>权限管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 右侧主体 -->
+    <div class="main-layout">
+      <!-- 顶部栏 -->
+      <header class="header">
+        <div class="header-left">
+          <span class="trigger" onclick="toggleSidebar()">☰</span>
+        </div>
+        <div class="header-right">
+          <div class="user-info">
+            <span class="avatar">邓</span>
+            <span>欢迎您，邓辉</span>
+          </div>
+          <span class="logout">🚪 退出登录</span>
+        </div>
+      </header>
+
+      <!-- 标签页 -->
+      <div class="tabs-bar" id="tabsBar">
+        <div class="tab-item active" data-tab="home"><span>首页</span><span class="tab-close" onclick="closeTab(event, 'home')">✕</span></div>
+        <div class="tab-item" data-tab="supplierList"><span>供货商管理</span><span class="tab-close" onclick="closeTab(event, 'supplierList')">✕</span></div>
+      </div>
+
+      <!-- 主内容 -->
+      <div class="content">
+        <!-- ==================== 首页 ==================== -->
+        <div class="page" id="page-home"></div>
+
+        <!-- ==================== 供货商管理 ==================== -->
+        <div class="page active" id="page-supplierList">
+          <div class="card">
+            <div class="search-form">
+              <div class="form-row">
+                <div class="form-item">
+                  <label>供货商</label>
+                  <input type="text" placeholder="请输入">
+                </div>
+                <div class="form-item">
+                  <label>时间</label>
+                  <div class="date-range">
+                    <input type="text" placeholder="开始时间" readonly style="width:110px;">
+                    <span class="sep">~</span>
+                    <input type="text" placeholder="结束时间" readonly style="width:110px;">
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="btn btn-primary">🔍 查询</button>
+                  <button class="btn" style="margin:0 12px;">🔄 重置</button>
+                  <button class="btn btn-green" style="margin-right:12px;">＋ 新增</button>
+                  <button class="btn btn-primary">导 出</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <colgroup>
+                  <col style="width:200px;min-width:200px;">
+                  <col><col><col><col><col>
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>操作</th>
+                    <th>ID</th>
+                    <th>供货商</th>
+                    <th>合作方式</th>
+                    <th>票务类型</th>
+                    <th>合同期</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-supplier-id="4" data-supplier-name="福福" data-cooperation="接口">
+                    <td class="table-actions">
+                      <a onclick="openGoodsTab(4, '福福', '接口')">编辑</a><span class="divider">|</span>
+                      <a onclick="openGoodsTab(4, '福福', '接口')">货源列表</a><span class="divider">|</span>
+                      <a>删除</a>
+                    </td>
+                    <td>4</td>
+                    <td>福福</td>
+                    <td>接口</td>
+                    <td>带票</td>
+                    <td>2026-05-22</td>
+                  </tr>
+                  <tr data-supplier-id="3" data-supplier-name="新巢科技" data-cooperation="导入">
+                    <td class="table-actions">
+                      <a onclick="openGoodsTab(3, '新巢科技', '导入')">编辑</a><span class="divider">|</span>
+                      <a onclick="openGoodsTab(3, '新巢科技', '导入')">货源管理</a><span class="divider">|</span>
+                      <a>删除</a>
+                    </td>
+                    <td>3</td>
+                    <td>新巢科技</td>
+                    <td>导入</td>
+                    <td>不带票</td>
+                    <td>2027-04-27</td>
+                  </tr>
+                  <tr data-supplier-id="2" data-supplier-name="福禄（新）" data-cooperation="接口">
+                    <td class="table-actions">
+                      <a onclick="openGoodsTab(2, '福禄（新）', '接口')">编辑</a><span class="divider">|</span>
+                      <a onclick="openGoodsTab(2, '福禄（新）', '接口')">货源列表</a><span class="divider">|</span>
+                      <a>删除</a>
+                    </td>
+                    <td>2</td>
+                    <td>福禄（新）</td>
+                    <td>接口</td>
+                    <td>带票</td>
+                    <td>2027-04-23</td>
+                  </tr>
+                  <tr data-supplier-id="1" data-supplier-name="商店自营" data-cooperation="导入">
+                    <td class="table-actions">
+                      <a onclick="openGoodsTab(1, '商店自营', '导入')">编辑</a><span class="divider">|</span>
+                      <a onclick="openGoodsTab(1, '商店自营', '导入')">货源管理</a><span class="divider">|</span>
+                      <a>删除</a>
+                    </td>
+                    <td>1</td>
+                    <td>商店自营</td>
+                    <td>导入</td>
+                    <td>带票</td>
+                    <td>2026-10-31</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="pagination">
+              <span class="total">1-4 共4条</span>
+              <button class="page-btn" disabled>◀</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn" disabled>▶</button>
+              <span class="page-size">10 条/页 ▼</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== 商品管理（占位） ==================== -->
+        <div class="page" id="page-goodsManager"></div>
+
+        <!-- ==================== 商品分类（占位） ==================== -->
+        <div class="page" id="page-goodsType"></div>
+
+        <!-- ==================== 供货商活动推广 ==================== -->
+        <div class="page" id="page-supplierPromotion">
+          <div class="card">
+            <div class="search-form">
+              <div class="form-row">
+                <div class="form-item">
+                  <label>供应商</label>
+                  <input type="text" placeholder="请输入" id="promoFilterSupplier">
+                </div>
+                <div class="form-item">
+                  <label>活动时间</label>
+                  <div class="date-range">
+                    <input type="text" placeholder="开始时间" readonly id="promoFilterStart" style="width:110px;">
+                    <span class="sep">~</span>
+                    <input type="text" placeholder="结束时间" readonly id="promoFilterEnd" style="width:110px;">
+                  </div>
+                </div>
+                <div class="form-item">
+                  <label>状态</label>
+                  <select style="height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px;" id="promoFilterStatus">
+                    <option value="">全部</option>
+                    <option value="启用">启用</option>
+                    <option value="禁用">禁用</option>
+                  </select>
+                </div>
+                <div class="form-actions">
+                  <button class="btn btn-primary" onclick="filterPromotions()">🔍 查询</button>
+                  <button class="btn" style="margin:0 12px;" onclick="resetPromoFilter()">🔄 重置</button>
+                  <button class="btn btn-green" onclick="openPromoModal()">＋ 新增</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <colgroup><col style="width:60px;min-width:60px;"><col style="width:140px;min-width:140px;"><col><col><col><col><col><col><col></colgroup>
+                <thead><tr>
+                  <th>活动ID</th><th>操作</th><th>供应商</th><th>关联货源</th><th>折扣</th><th>开始时间</th><th>结束时间</th><th>创建时间</th><th>状态</th>
+                </tr></thead>
+                <tbody id="promoTableBody"></tbody>
+              </table>
+            </div>
+
+            <div class="pagination" id="promoPagination"></div>
+          </div>
+        </div>
+
+        <!-- ==================== 新增/编辑弹窗 ==================== -->
+        <div class="modal-mask" id="promoModal" style="display:none;" onclick="if(event.target===this)closePromoModal()">
+          <div class="modal-wrap">
+            <div class="modal-header">
+              <span class="modal-title" id="promoModalTitle">新增活动推广</span>
+              <span class="modal-close" onclick="closePromoModal()">✕</span>
+            </div>
+            <div class="modal-body">
+              <div class="modal-form-item">
+                <div class="form-label required">活动名称</div>
+                <div class="form-control">
+                  <input type="text" id="promoName" placeholder="请输入活动名称" maxlength="50">
+                </div>
+              </div>
+              <div class="modal-form-item">
+                <div class="form-label required">关联供应商</div>
+                <div class="form-control">
+                  <div class="custom-select" id="promoSupplierSelect">
+                    <div class="custom-select-trigger" onclick="toggleSupplierDropdown()">
+                      <span class="trigger-text" id="promoSupplierText">请选择供应商</span>
+                      <span class="arrow" id="promoSupplierArrow">▼</span>
+                    </div>
+                    <div class="custom-select-dropdown" id="promoSupplierDropdown"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-form-item">
+                <div class="form-label required">关联货源</div>
+                <div class="form-control">
+                  <div class="custom-select" id="promoGoodsMultiWrap">
+                    <div class="custom-select-trigger" onclick="toggleGoodsDropdown()">
+                      <span class="trigger-text" id="promoGoodsText">请选择货源</span>
+                      <span class="arrow" id="promoGoodsArrow">▼</span>
+                    </div>
+                    <div class="custom-select-dropdown" id="promoGoodsDropdown"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-form-item">
+                <div class="form-label required">活动时间</div>
+                <div class="form-control">
+                  <div class="date-range">
+                    <input type="text" placeholder="开始时间" readonly id="promoStartDate" style="width:110px;">
+                    <span class="sep">~</span>
+                    <input type="text" placeholder="结束时间" readonly id="promoEndDate" style="width:110px;">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-form-item">
+                <div class="form-label">折扣</div>
+                <div class="form-control" style="display:flex;align-items:center;gap:4px;">
+                  <input type="text" id="promoDiscount" placeholder="请输入折扣" style="width:160px;">
+                  <span style="color:#666;font-size:13px;">折</span>
+                </div>
+              </div>
+              <div class="modal-form-item">
+                <div class="form-label">状态</div>
+                <div class="form-control">
+                  <label style="margin-right:24px;font-size:13px;"><input type="radio" name="promoStatus" value="启用" checked> 启用</label>
+                  <label style="font-size:13px;"><input type="radio" name="promoStatus" value="禁用"> 禁用</label>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" onclick="closePromoModal()">关 闭</button>
+              <button class="btn btn-primary" onclick="savePromotion()">确 定</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== 货源管理/货源列表 动态生成区域 ==================== -->
+        <div id="dynamicPages"></div>
+      </div>
+
+      <!-- 页脚 -->
+      <div class="footer">Copyright © 2019 NN运营</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+// ===== toast =====
+function showToast(msg) {
+  var wrap = document.getElementById('toastWrap');
+  var el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(function() { el.remove(); }, 2000);
+}
+
+// ===== 数据存储（来自三个源文件的实际数据） =====
+var supplierGoodsData = {
+  // supplierId=1 商店自营 (导入) — 来自 货源管理（接口）_副本.html (仅捕获第1页10条)
+  1: {
+    total: 29,
+    pages: [
+      [
+        { id: 33, name: '战争雷霆150金鹰币', stock: 24, type: 'CDK', discount: '9.5折', discountTime: '2026-06-01 ~ 2026-12-31', status: '已启用' },
+        { id: 17, name: '枪械-莫辛纳甘', stock: 0, type: 'CDK', discount: '8.8折', discountTime: '2026-05-15 ~ 2026-11-15', status: '已启用' },
+        { id: 14, name: '枪械-98K', stock: 1, type: 'CDK', discount: '9.0折', discountTime: '2026-06-10 ~ 2026-09-30', status: '已启用' },
+        { id: 13, name: '枪械-AK47', stock: 33, type: 'CDK', discount: '', discountTime: '', status: '已启用' },
+        { id: 19, name: '绝地求生-Xbox版', stock: 27, type: 'CDK', discount: '', discountTime: '', status: '已启用' },
+        { id: 18, name: '绝地求生-Ps版', stock: 26, type: 'CDK', discount: '8.5折', discountTime: '2026-05-20 ~ 2026-08-20', status: '已启用' },
+        { id: 12, name: '绝地求生-排位竞技', stock: 23, type: 'CDK', discount: '9.2折', discountTime: '2026-06-05 ~ 2026-12-05', status: '已启用' },
+        { id: 11, name: '绝地求生-豪华版', stock: 21, type: 'CDK', discount: '8.8折', discountTime: '2026-03-01 ~ 2026-09-01', status: '已启用' },
+        { id: 22, name: '完蛋!我也能追到美女了!-DLC', stock: 37, type: 'CDK', discount: '', discountTime: '', status: '已启用' },
+        { id: 21, name: '完蛋!我也能追到美女了!-2', stock: 38, type: 'CDK', discount: '7.0折', discountTime: '2026-06-01 ~ 2026-08-31', status: '已启用' }
+      ]
+    ]
+  },
+  // supplierId=3 新巢科技 (导入) — 来自 货源管理（导入）.html
+  3: {
+    total: 1,
+    pages: [
+      [
+        { id: 29, name: '台湾mycard点数50', stock: 15, type: 'CDK', discount: '9.0折', discountTime: '2026-05-01 ~ 2026-11-30', status: '已启用' }
+      ]
+    ]
+  },
+  // supplierId=2 福禄（新）(接口) — 无源数据
+  2: { total: 0, pages: [[]] },
+  // supplierId=4 福福 (接口) — 无源数据
+  4: { total: 0, pages: [[]] }
+};
+
+// 当前每个 goods tab 的分页状态
+var goodsPageState = {};
+
+// ===== 侧边栏子菜单展开/收起 =====
+function toggleSubmenu(el) {
+  var children = el.querySelector('.submenu-children');
+  var arrow = el.querySelector('.arrow');
+  if (children && arrow) {
+    children.classList.toggle('open');
+    arrow.classList.toggle('open');
+  }
+}
+
+// ===== 侧边栏收起 =====
+function toggleSidebar() {
+  var sider = document.querySelector('.sider');
+  sider.style.display = sider.style.display === 'none' ? '' : 'none';
+}
+
+// ===== 菜单点击 =====
+function switchMenu(el) {
+  document.querySelectorAll('.menu-item').forEach(function(i) { i.classList.remove('active'); });
+  el.classList.add('active');
+  var page = el.getAttribute('data-page');
+  if (page) openTab(page);
+}
+
+// ===== 标签页管理 =====
+var openTabs = ['home', 'supplierList'];
+
+function openTab(tabId, label) {
+  // 如果已存在则激活
+  var existingTab = document.querySelector('.tab-item[data-tab="' + tabId + '"]');
+  if (existingTab) {
+    activateTab(tabId);
+    return;
+  }
+
+  // 添加标签
+  if (!label) {
+    var labelMap = {
+      'home': '首页',
+      'supplierList': '供货商管理',
+      'goodsManager': '商品管理',
+      'goodsType': '商品分类',
+      'supplierPromotion': '供货商活动推广'
+    };
+    label = labelMap[tabId] || tabId;
+  }
+
+  var tab = document.createElement('div');
+  tab.className = 'tab-item';
+  tab.setAttribute('data-tab', tabId);
+  tab.innerHTML = '<span>' + label + '</span><span class="tab-close" onclick="closeTab(event, \'' + tabId + '\')">✕</span>';
+  tab.onclick = function(e) {
+    if (!e.target.classList.contains('tab-close')) activateTab(tabId);
+  };
+  document.getElementById('tabsBar').appendChild(tab);
+  openTabs.push(tabId);
+  activateTab(tabId);
+}
+
+function activateTab(tabId) {
+  // 更新标签激活状态
+  document.querySelectorAll('.tab-item').forEach(function(t) { t.classList.remove('active'); });
+  var tab = document.querySelector('.tab-item[data-tab="' + tabId + '"]');
+  if (tab) tab.classList.add('active');
+
+  // 更新页面显示
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  var page = document.getElementById('page-' + tabId);
+  if (page) {
+    page.classList.add('active');
+  }
+
+  // 更新菜单高亮
+  document.querySelectorAll('.menu-item').forEach(function(i) { i.classList.remove('active'); });
+  var menuItem = document.querySelector('.menu-item[data-page="' + tabId + '"]');
+  if (menuItem) menuItem.classList.add('active');
+}
+
+function closeTab(e, tabId) {
+  e.stopPropagation();
+  if (tabId === 'home') return; // 首页不可关闭
+
+  var tab = document.querySelector('.tab-item[data-tab="' + tabId + '"]');
+  if (!tab) return;
+
+  var isActive = tab.classList.contains('active');
+  var idx = openTabs.indexOf(tabId);
+  if (idx > -1) openTabs.splice(idx, 1);
+  tab.remove();
+
+  // 如果关闭的是动态页面，清理DOM
+  var dynPage = document.getElementById('page-' + tabId);
+  if (dynPage && dynPage.parentElement.id === 'dynamicPages') {
+    dynPage.remove();
+  }
+
+  if (isActive && openTabs.length > 0) {
+    activateTab(openTabs[openTabs.length - 1]);
+  }
+}
+
+// ===== 打开货源管理/货源列表 =====
+function openGoodsTab(supplierId, supplierName, cooperationType) {
+  var tabId, label, pageTitle;
+  if (cooperationType === '导入') {
+    tabId = 'goodsSource_' + supplierId;
+    label = '货源管理';
+    pageTitle = '货源管理';
+  } else {
+    tabId = 'supplier_' + supplierId;
+    label = '货源列表';
+    pageTitle = '货源列表';
+  }
+
+  // 如果已存在则激活
+  if (openTabs.indexOf(tabId) > -1) {
+    activateTab(tabId);
+    return;
+  }
+
+  // 创建标签
+  var tab = document.createElement('div');
+  tab.className = 'tab-item';
+  tab.setAttribute('data-tab', tabId);
+  tab.innerHTML = '<span>' + label + '</span><span class="tab-close" onclick="closeTab(event, \'' + tabId + '\')">✕</span>';
+  tab.onclick = function(e) {
+    if (!e.target.classList.contains('tab-close')) activateTab(tabId);
+  };
+  document.getElementById('tabsBar').appendChild(tab);
+  openTabs.push(tabId);
+
+  // 创建页面内容
+  createGoodsPage(tabId, supplierId, supplierName, cooperationType);
+  activateTab(tabId);
+}
+
+function createGoodsPage(tabId, supplierId, supplierName, cooperationType) {
+  var container = document.getElementById('dynamicPages');
+  var pageDiv = document.createElement('div');
+  pageDiv.className = 'page';
+  pageDiv.id = 'page-' + tabId;
+
+  var data = supplierGoodsData[supplierId] || { total: 0, pages: [[]] };
+  var currentPage = 0;
+  goodsPageState[tabId] = currentPage;
+
+  var hasData = data.total > 0;
+  var pageData = data.pages[0] || [];
+  var totalPages = data.pages.length;
+  var totalCount = data.total;
+
+  var html = '<div class="card">';
+  html += '<div class="search-form">';
+  html += '<div class="form-row">';
+  html += '<div class="form-item"><label>商品名称</label><input type="text" placeholder="请输入"></div>';
+  html += '<div class="form-item"><label>历史库存</label><input type="text" placeholder="请选择库存时间" readonly></div>';
+  html += '<div class="form-actions">';
+  html += '<button class="btn btn-primary">导 出</button>';
+  html += '<button class="btn btn-primary" style="margin:0 12px;">🔍 查询</button>';
+  html += '<button class="btn" style="margin-right:12px;">🔄 重置</button>';
+  html += '<button class="btn btn-green">＋ 新增</button>';
+  html += '</div></div></div>';
+
+  html += '<div class="table-wrap"><table>';
+  html += '<colgroup><col style="width:300px;min-width:300px;"><col><col><col><col><col><col><col></colgroup>';
+  html += '<thead><tr>';
+  html += '<th>操作</th><th>商品ID</th><th>商品名称</th><th>商品库存</th><th>商品类型</th><th>商品折扣</th><th>折扣时间</th><th>状态</th>';
+  html += '</tr></thead><tbody>';
+
+  if (hasData) {
+    for (var i = 0; i < pageData.length; i++) {
+      var row = pageData[i];
+      html += '<tr>';
+      html += '<td class="table-actions">';
+      html += '<a>编辑</a><span class="divider">|</span>';
+      html += '<a>禁用</a><span class="divider">|</span>';
+      html += '<a>批次管理</a><span class="divider">|</span>';
+      html += '<a>库存管理</a>';
+      html += '</td>';
+      html += '<td>' + row.id + '</td>';
+      html += '<td>' + row.name + '</td>';
+      html += '<td>' + row.stock + '</td>';
+      html += '<td>' + row.type + '</td>';
+      html += '<td>' + (row.discount || '-') + '</td>';
+      html += '<td>' + (row.discountTime || '-') + '</td>';
+      html += '<td><span class="badge">' + row.status + '</span></td>';
+      html += '</tr>';
+    }
+  }
+
+  html += '</tbody></table></div>';
+
+  // 分页
+  html += '<div class="pagination">';
+  if (hasData) {
+    var start = currentPage * 10 + 1;
+    var end = Math.min(start + pageData.length - 1, totalCount);
+    html += '<span class="total">' + start + '-' + end + ' 共' + totalCount + '条</span>';
+    html += '<button class="page-btn" ' + (currentPage === 0 ? 'disabled' : 'onclick="goToGoodsPage(\'' + tabId + '\',' + supplierId + ',' + (currentPage - 1) + ')"') + '>◀</button>';
+    for (var p = 0; p < totalPages; p++) {
+      html += '<button class="page-btn' + (p === currentPage ? ' active' : '') + '" onclick="goToGoodsPage(\'' + tabId + '\',' + supplierId + ',' + p + ')">' + (p + 1) + '</button>';
+    }
+    html += '<button class="page-btn" ' + (currentPage >= totalPages - 1 ? 'disabled' : 'onclick="goToGoodsPage(\'' + tabId + '\',' + supplierId + ',' + (currentPage + 1) + ')"') + '>▶</button>';
+  } else {
+    html += '<span class="total">0-0 共0条</span>';
+    html += '<button class="page-btn" disabled>◀</button>';
+    html += '<button class="page-btn active">1</button>';
+    html += '<button class="page-btn" disabled>▶</button>';
+  }
+  html += '<span class="page-size">10 条/页 ▼</span>';
+  html += '</div>';
+
+  html += '</div>';
+  pageDiv.innerHTML = html;
+  container.appendChild(pageDiv);
+}
+
+// ===== 货源分页切换 =====
+function goToGoodsPage(tabId, supplierId, pageNum) {
+  var data = supplierGoodsData[supplierId];
+  if (!data || pageNum < 0 || pageNum >= data.pages.length) return;
+
+  goodsPageState[tabId] = pageNum;
+  var pageData = data.pages[pageNum];
+  var totalPages = data.pages.length;
+  var totalCount = data.total;
+
+  var pageDiv = document.getElementById('page-' + tabId);
+  if (!pageDiv) return;
+
+  // 更新表格体
+  var tbody = pageDiv.querySelector('tbody');
+  var html = '';
+  for (var i = 0; i < pageData.length; i++) {
+    var row = pageData[i];
+    html += '<tr>';
+    html += '<td class="table-actions">';
+    html += '<a>编辑</a><span class="divider">|</span>';
+    html += '<a>禁用</a><span class="divider">|</span>';
+    html += '<a>批次管理</a><span class="divider">|</span>';
+    html += '<a>库存管理</a>';
+    html += '</td>';
+    html += '<td>' + row.id + '</td>';
+    html += '<td>' + row.name + '</td>';
+    html += '<td>' + row.stock + '</td>';
+    html += '<td>' + row.type + '</td>';
+    html += '<td>' + (row.discount || '-') + '</td>';
+    html += '<td>' + (row.discountTime || '-') + '</td>';
+    html += '<td><span class="badge">' + row.status + '</span></td>';
+    html += '</tr>';
+  }
+  tbody.innerHTML = html;
+
+  // 更新分页
+  var pagination = pageDiv.querySelector('.pagination');
+  var start = pageNum * 10 + 1;
+  var end = Math.min(start + pageData.length - 1, totalCount);
+  var pagHtml = '<span class="total">' + start + '-' + end + ' 共' + totalCount + '条</span>';
+  pagHtml += '<button class="page-btn" ' + (pageNum === 0 ? 'disabled' : 'onclick="goToGoodsPage(\'' + tabId + '\',' + supplierId + ',' + (pageNum - 1) + ')"') + '>◀</button>';
+  for (var p = 0; p < totalPages; p++) {
+    pagHtml += '<button class="page-btn' + (p === pageNum ? ' active' : '') + '" onclick="goToGoodsPage(\'' + tabId + '\',' + supplierId + ',' + p + ')">' + (p + 1) + '</button>';
+  }
+  pagHtml += '<button class="page-btn" ' + (pageNum >= totalPages - 1 ? 'disabled' : 'onclick="goToGoodsPage(\'' + tabId + '\',' + supplierId + ',' + (pageNum + 1) + ')"') + '>▶</button>';
+  pagHtml += '<span class="page-size">10 条/页 ▼</span>';
+  pagination.innerHTML = pagHtml;
+}
+
+// ===== 供货商活动推广 =====
+// 供应商列表（来自供货商管理表格）
+var supplierList = [
+  { id: 4, name: '福福', cooperation: '接口' },
+  { id: 3, name: '新巢科技', cooperation: '导入' },
+  { id: 2, name: '福禄（新）', cooperation: '接口' },
+  { id: 1, name: '商店自营', cooperation: '导入' }
+];
+
+// 活动推广数据
+var promotions = [
+  { id: 1, name: '暑期促销活动', supplierIds: [1], goodsIds: [33, 14], supplierNames: '商店自营', goodsNames: '战争雷霆150金鹰币, 枪械-98K', discount: '9.0折', startDate: '2026-06-01T00:00', endDate: '2026-07-31T00:00', createTime: '2026-06-01 10:30:00', status: '启用' },
+  { id: 2, name: '新巢科技专享', supplierIds: [3], goodsIds: [29], supplierNames: '新巢科技', goodsNames: '台湾mycard点数50', discount: '8.5折', startDate: '2026-05-15T00:00', endDate: '2026-08-15T00:00', createTime: '2026-05-10 14:20:00', status: '启用' },
+  { id: 3, name: '春季联合推广', supplierIds: [1, 3], goodsIds: [33, 29], supplierNames: '商店自营, 新巢科技', goodsNames: '战争雷霆150金鹰币, 台湾mycard点数50', discount: '9.0折', startDate: '2026-04-01T00:00', endDate: '2026-06-30T00:00', createTime: '2026-03-28 09:00:00', status: '禁用' }
+];
+var promoNextId = 4;
+var editingPromoId = null;
+
+// 获取供应商下所有货源（flat）
+function getGoodsBySupplierIds(supplierIds) {
+  var result = [];
+  for (var i = 0; i < supplierIds.length; i++) {
+    var data = supplierGoodsData[supplierIds[i]];
+    if (data && data.pages) {
+      for (var p = 0; p < data.pages.length; p++) {
+        for (var j = 0; j < data.pages[p].length; j++) {
+          var g = data.pages[p][j];
+          result.push({ goodsId: g.id, goodsName: g.name, supplierId: supplierIds[i], supplierName: getSupplierName(supplierIds[i]) });
+        }
+      }
+    }
+  }
+  return result;
+}
+
+function getSupplierName(id) {
+  for (var i = 0; i < supplierList.length; i++) {
+    if (supplierList[i].id === id) return supplierList[i].name;
+  }
+  return '';
+}
+
+// 渲染弹窗供应商下拉选项
+var selectedSupplierId = null;
+function renderPromoSupplierList(selectedIds) {
+  selectedSupplierId = (selectedIds && selectedIds.length > 0) ? selectedIds[0] : null;
+  var container = document.getElementById('promoSupplierDropdown');
+  var html = '';
+  for (var i = 0; i < supplierList.length; i++) {
+    var s = supplierList[i];
+    var cls = s.id === selectedSupplierId ? ' option selected' : ' option';
+    html += '<div class="' + cls + '" onclick="selectSupplier(' + s.id + ',\'' + s.name + '\')">' + s.name + '（' + s.cooperation + '）</div>';
+  }
+  container.innerHTML = html;
+  // 更新触发按钮文字
+  var textEl = document.getElementById('promoSupplierText');
+  if (selectedSupplierId) {
+    textEl.textContent = getSupplierName(selectedSupplierId);
+  } else {
+    textEl.textContent = '请选择供应商';
+  }
+}
+
+function selectSupplier(id, name) {
+  selectedSupplierId = id;
+  document.getElementById('promoSupplierText').textContent = name;
+  document.getElementById('promoSupplierDropdown').classList.remove('show');
+  document.getElementById('promoSupplierArrow').classList.remove('open');
+  // 重新渲染供应商列表高亮
+  renderPromoSupplierList([id]);
+  // 联动渲染货源列表
+  renderPromoGoodsList();
+}
+
+function toggleSupplierDropdown() {
+  var dd = document.getElementById('promoSupplierDropdown');
+  var arrow = document.getElementById('promoSupplierArrow');
+  var isOpen = dd.classList.contains('show');
+  // 关闭货源下拉
+  document.getElementById('promoGoodsDropdown').classList.remove('show');
+  document.getElementById('promoGoodsArrow').classList.remove('open');
+  if (isOpen) {
+    dd.classList.remove('show');
+    arrow.classList.remove('open');
+  } else {
+    dd.classList.add('show');
+    arrow.classList.add('open');
+  }
+}
+
+// 渲染弹窗货源多选下拉
+var selectedGoodsIds = [];
+var selectedGoodsNames = [];
+function renderPromoGoodsList(selectedIds) {
+  selectedGoodsIds = selectedIds ? selectedIds.slice() : [];
+  selectedGoodsNames = [];
+  var container = document.getElementById('promoGoodsDropdown');
+  if (!selectedSupplierId) {
+    container.innerHTML = '<div class="option" style="color:#999;cursor:default;">请先选择供应商</div>';
+    updateGoodsTriggerText();
+    return;
+  }
+  var goods = getGoodsBySupplierIds([selectedSupplierId]);
+  if (goods.length === 0) {
+    container.innerHTML = '<div class="option" style="color:#999;cursor:default;">所选供应商暂无货源数据</div>';
+    updateGoodsTriggerText();
+    return;
+  }
+  // 存储当前货源列表供后续查找
+  window._currentGoodsList = goods;
+  var html = '';
+  for (var j = 0; j < goods.length; j++) {
+    var g = goods[j];
+    var checked = selectedGoodsIds.indexOf(g.goodsId) > -1 ? ' checked' : '';
+    html += '<label class="option"><input type="checkbox" value="' + g.goodsId + '"' + checked + ' onchange="onGoodsCheckChange()">' + g.goodsName + ' <span style="color:#999;font-size:11px;">（' + g.supplierName + '）</span></label>';
+  }
+  container.innerHTML = html;
+  updateGoodsTriggerText();
+}
+
+function onGoodsCheckChange() {
+  var checks = document.querySelectorAll('#promoGoodsDropdown input[type=checkbox]');
+  selectedGoodsIds = [];
+  selectedGoodsNames = [];
+  var goodsList = window._currentGoodsList || [];
+  for (var i = 0; i < checks.length; i++) {
+    if (checks[i].checked) {
+      var id = parseInt(checks[i].value);
+      selectedGoodsIds.push(id);
+      for (var j = 0; j < goodsList.length; j++) {
+        if (goodsList[j].goodsId === id) {
+          selectedGoodsNames.push(goodsList[j].goodsName);
+          break;
+        }
+      }
+    }
+  }
+  updateGoodsTriggerText();
+}
+
+function updateGoodsTriggerText() {
+  var textEl = document.getElementById('promoGoodsText');
+  if (selectedGoodsNames.length > 0) {
+    textEl.textContent = selectedGoodsNames.join(', ');
+  } else {
+    textEl.textContent = '请选择货源';
+  }
+}
+
+function toggleGoodsDropdown() {
+  if (!selectedSupplierId) return;
+  var dd = document.getElementById('promoGoodsDropdown');
+  var arrow = document.getElementById('promoGoodsArrow');
+  var isOpen = dd.classList.contains('show');
+  // 关闭供应商下拉
+  document.getElementById('promoSupplierDropdown').classList.remove('show');
+  document.getElementById('promoSupplierArrow').classList.remove('open');
+  if (isOpen) {
+    dd.classList.remove('show');
+    arrow.classList.remove('open');
+  } else {
+    dd.classList.add('show');
+    arrow.classList.add('open');
+  }
+}
+
+// 打开新增弹窗
+function openPromoModal(promoId) {
+  editingPromoId = promoId || null;
+  document.getElementById('promoModalTitle').textContent = promoId ? '编辑活动推广' : '新增活动推广';
+
+  var record = null;
+  if (promoId) {
+    for (var i = 0; i < promotions.length; i++) {
+      if (promotions[i].id === promoId) { record = promotions[i]; break; }
+    }
+  }
+
+  // 关闭所有下拉
+  document.getElementById('promoSupplierDropdown').classList.remove('show');
+  document.getElementById('promoSupplierArrow').classList.remove('open');
+  document.getElementById('promoGoodsDropdown').classList.remove('show');
+  document.getElementById('promoGoodsArrow').classList.remove('open');
+
+  renderPromoSupplierList(record ? record.supplierIds : []);
+  renderPromoGoodsList(record ? record.goodsIds : []);
+
+  var nameInput = document.getElementById('promoName');
+  nameInput.value = record ? (record.name || '') : '';
+  nameInput.readOnly = !!promoId;
+
+  document.getElementById('promoStartDate').value = record ? record.startDate : '';
+  document.getElementById('promoEndDate').value = record ? record.endDate : '';
+  document.getElementById('promoDiscount').value = record ? (record.discount || '') : '';
+
+  var radios = document.getElementsByName('promoStatus');
+  var statusVal = record ? record.status : '启用';
+  for (var r = 0; r < radios.length; r++) {
+    radios[r].checked = (radios[r].value === statusVal);
+  }
+
+  document.getElementById('promoModal').style.display = 'flex';
+}
+
+function closePromoModal() {
+  document.getElementById('promoModal').style.display = 'none';
+  editingPromoId = null;
+  selectedSupplierId = null;
+  selectedGoodsIds = [];
+  selectedGoodsNames = [];
+  var nameInput = document.getElementById('promoName');
+  nameInput.value = '';
+  nameInput.readOnly = false;
+}
+
+// 保存活动
+function savePromotion() {
+  // 活动名称
+  var promoName = document.getElementById('promoName').value.trim();
+  if (!promoName) { showToast('请输入活动名称'); return; }
+
+  // 供应商（单选）
+  if (!selectedSupplierId) { showToast('请选择一个供应商'); return; }
+  var supplierIds = [selectedSupplierId];
+  var supplierNames = [getSupplierName(selectedSupplierId)];
+
+  // 收集货源（多选）
+  var goodsChecks = document.querySelectorAll('#promoGoodsDropdown input[type=checkbox]');
+  var goodsIds = [];
+  var goodsNames = [];
+  for (var j = 0; j < goodsChecks.length; j++) {
+    if (goodsChecks[j].checked) {
+      goodsIds.push(parseInt(goodsChecks[j].value));
+    }
+  }
+  var goodsList = window._currentGoodsList || [];
+  for (var k = 0; k < goodsChecks.length; k++) {
+    if (goodsChecks[k].checked) {
+      var gid = parseInt(goodsChecks[k].value);
+      for (var g = 0; g < goodsList.length; g++) {
+        if (goodsList[g].goodsId === gid) {
+          goodsNames.push(goodsList[g].goodsName);
+          break;
+        }
+      }
+    }
+  }
+  if (goodsIds.length === 0) { showToast('请至少选择一个货源'); return; }
+
+  var startDate = document.getElementById('promoStartDate').value;
+  var endDate = document.getElementById('promoEndDate').value;
+  var discount = document.getElementById('promoDiscount').value;
+  if (!startDate) { showToast('请选择开始时间'); return; }
+  if (!endDate) { showToast('请选择结束时间'); return; }
+  if (endDate < startDate) { showToast('结束时间不能早于开始时间'); return; }
+
+  var statusVal = '启用';
+  var radios = document.getElementsByName('promoStatus');
+  for (var r = 0; r < radios.length; r++) {
+    if (radios[r].checked) statusVal = radios[r].value;
+  }
+
+  var now = new Date();
+  var createTime = now.getFullYear() + '-' +
+    String(now.getMonth() + 1).padStart(2, '0') + '-' +
+    String(now.getDate()).padStart(2, '0') + ' ' +
+    String(now.getHours()).padStart(2, '0') + ':' +
+    String(now.getMinutes()).padStart(2, '0') + ':' +
+    String(now.getSeconds()).padStart(2, '0');
+
+  if (editingPromoId) {
+    for (var e = 0; e < promotions.length; e++) {
+      if (promotions[e].id === editingPromoId) {
+        promotions[e].supplierIds = supplierIds;
+        promotions[e].goodsIds = goodsIds;
+        promotions[e].supplierNames = supplierNames.join(', ');
+        promotions[e].goodsNames = goodsNames.join(', ');
+        promotions[e].discount = discount;
+        promotions[e].startDate = startDate;
+        promotions[e].endDate = endDate;
+        promotions[e].status = statusVal;
+        break;
+      }
+    }
+  } else {
+    promotions.push({
+      id: promoNextId++,
+      name: promoName,
+      supplierIds: supplierIds,
+      goodsIds: goodsIds,
+      supplierNames: supplierNames.join(', '),
+      goodsNames: goodsNames.join(', '),
+      discount: discount,
+      startDate: startDate,
+      endDate: endDate,
+      createTime: createTime,
+      status: statusVal
+    });
+  }
+
+  closePromoModal();
+  renderPromoTable();
+}
+
+// 渲染活动表格
+function renderPromoTable(filterText, filterStart, filterEnd, filterStatus) {
+  var filtered = promotions.slice();
+  if (filterText) {
+    filtered = filtered.filter(function(p) {
+      return p.supplierNames.indexOf(filterText) > -1 || p.goodsNames.indexOf(filterText) > -1;
+    });
+  }
+  if (filterStart) {
+    filtered = filtered.filter(function(p) { return p.startDate >= filterStart; });
+  }
+  if (filterEnd) {
+    filtered = filtered.filter(function(p) { return p.endDate <= filterEnd; });
+  }
+  if (filterStatus) {
+    filtered = filtered.filter(function(p) { return p.status === filterStatus; });
+  }
+
+  var tbody = document.getElementById('promoTableBody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" style="padding:40px;color:#999;">暂无数据</td></tr>';
+  } else {
+    var html = '';
+    for (var i = 0; i < filtered.length; i++) {
+      var p = filtered[i];
+      html += '<tr>';
+      html += '<td>' + p.id + '</td>';
+      html += '<td class="table-actions"><a onclick="openPromoModal(' + p.id + ')">编辑</a></td>';
+      html += '<td>' + p.supplierNames + '</td>';
+      html += '<td>' + p.goodsNames + '</td>';
+      html += '<td>' + (p.discount || '-') + '</td>';
+      html += '<td>' + (p.startDate ? p.startDate.replace('T', ' ') : '') + '</td>';
+      html += '<td>' + (p.endDate ? p.endDate.replace('T', ' ') : '') + '</td>';
+      html += '<td>' + p.createTime + '</td>';
+      html += '<td><span class="tag ' + (p.status === '启用' ? 'tag-success' : 'tag-default') + '">' + p.status + '</span></td>';
+      html += '</tr>';
+    }
+    tbody.innerHTML = html;
+  }
+
+  // 分页
+  var pagination = document.getElementById('promoPagination');
+  pagination.innerHTML = '<span class="total">1-' + filtered.length + ' 共' + filtered.length + '条</span>' +
+    '<button class="page-btn" disabled>◀</button>' +
+    '<button class="page-btn active">1</button>' +
+    '<button class="page-btn" disabled>▶</button>' +
+    '<span class="page-size">10 条/页 ▼</span>';
+}
+
+function filterPromotions() {
+  renderPromoTable(
+    document.getElementById('promoFilterSupplier').value,
+    document.getElementById('promoFilterStart').value,
+    document.getElementById('promoFilterEnd').value,
+    document.getElementById('promoFilterStatus').value
+  );
+}
+
+function resetPromoFilter() {
+  document.getElementById('promoFilterSupplier').value = '';
+  document.getElementById('promoFilterStart').value = '';
+  document.getElementById('promoFilterEnd').value = '';
+  document.getElementById('promoFilterStatus').value = '';
+  renderPromoTable();
+}
+
+// 页面初始化时渲染（当切换到该页时）
+var origActivateTab = activateTab;
+activateTab = function(tabId) {
+  origActivateTab(tabId);
+  if (tabId === 'supplierPromotion') {
+    renderPromoTable();
+  }
+};
+
+// ===== 菜单点击高亮（排除子菜单内的点击） =====
+document.querySelectorAll('.menu-item').forEach(function(item) {
+  item.addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.querySelectorAll('.menu-item').forEach(function(i) { i.classList.remove('active'); });
+    this.classList.add('active');
+  });
+});
+
+// ===== 点击弹窗外部关闭下拉 =====
+document.addEventListener('click', function(e) {
+  var supplierSelect = document.getElementById('promoSupplierSelect');
+  var goodsWrap = document.getElementById('promoGoodsMultiWrap');
+  if (supplierSelect && !supplierSelect.contains(e.target)) {
+    document.getElementById('promoSupplierDropdown').classList.remove('show');
+    document.getElementById('promoSupplierArrow').classList.remove('open');
+  }
+  if (goodsWrap && !goodsWrap.contains(e.target)) {
+    document.getElementById('promoGoodsDropdown').classList.remove('show');
+    document.getElementById('promoGoodsArrow').classList.remove('open');
+  }
+});
+
+// ===== 默认激活供货商管理 =====
+activateTab('supplierList');
+</script>
+</body>
+</html>

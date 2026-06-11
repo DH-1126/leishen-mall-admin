@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>货源管理 · 游戏交易管理后台</title>
+<style>
+  html, body { height: 100%; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; background: #f0f2f5; }
+
+  /* 滚动条 */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #f6f6f6; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb { background: #cdcdcd; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: #747474; }
+  ::-webkit-scrollbar-corner { background: #f6f6f6; }
+
+  /* 布局 */
+  .layout { display: flex; min-height: 100vh; }
+  .sider { width: 230px; min-width: 230px; max-width: 230px; background: #001529; color: #fff; flex-shrink: 0; }
+  .main-layout { flex: 1; display: flex; flex-direction: column; }
+
+  /* 侧边栏 */
+  .logo { padding: 16px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .logo a { display: flex; align-items: center; justify-content: center; text-decoration: none; color: #fff; }
+  .logo img { width: 32px; height: 32px; margin-right: 8px; }
+  .logo h1 { font-size: 16px; color: #fff; margin: 0; font-weight: 600; white-space: nowrap; }
+
+  .nav-search { margin-top: 12px; }
+  .nav-search input { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: #fff; }
+  .nav-search input::placeholder { color: rgba(255,255,255,0.4); }
+
+  /* 菜单 */
+  .sider-menu { background: #001529; }
+  .menu-item, .submenu-title { display: flex; align-items: center; padding: 12px 24px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.3s; font-size: 14px; }
+  .menu-item:hover, .submenu-title:hover { color: #fff; background: rgba(255,255,255,0.08); }
+  .menu-item.active { color: #fff; background: #1890ff; }
+  .submenu-title { justify-content: space-between; }
+  .submenu-title .arrow { font-size: 10px; transition: transform 0.3s; }
+  .submenu-title .arrow.open { transform: rotate(90deg); }
+  .submenu-icon { margin-right: 10px; font-size: 14px; width: 14px; text-align: center; }
+  .submenu-children { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+  .submenu-children.open { max-height: 200px; }
+  .submenu-children .menu-item { padding-left: 48px; }
+
+  /* 顶部栏 */
+  .header { display: flex; align-items: center; justify-content: space-between; height: 48px; background: #fff; padding: 0 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .header-left { display: flex; align-items: center; }
+  .trigger { font-size: 18px; padding: 0 12px; cursor: pointer; color: #333; }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .user-info { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #333; }
+  .avatar { width: 28px; height: 28px; border-radius: 50%; background: #1890ff; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; }
+  .logout { color: #666; cursor: pointer; }
+
+  /* 标签页 */
+  .tabs-bar { display: flex; align-items: center; height: 40px; background: #f0f2f5; border-bottom: 1px solid #e8e8e8; padding: 0 8px; }
+  .tab-item { padding: 6px 16px; margin: 0 2px; border-radius: 4px 4px 0 0; cursor: pointer; font-size: 13px; color: #666; background: #e8e8e8; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .tab-item.active { color: #1890ff; background: #fff; }
+  .tab-close { font-size: 10px; opacity: 0.5; }
+  .tab-close:hover { opacity: 1; }
+
+  /* 内容区 */
+  .content { margin: 12px; flex: 1; }
+  .card { background: #fff; border-radius: 2px; padding: 24px; }
+  .search-form { margin-bottom: 16px; }
+  .form-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
+  .form-item { display: flex; flex-direction: column; gap: 4px; }
+  .form-item label { font-size: 13px; color: #666; }
+  .form-item input { height: 32px; border: 1px solid #d9d9d9; border-radius: 4px; padding: 0 11px; font-size: 13px; width: 200px; }
+  .form-item input:focus { border-color: #1890ff; outline: none; box-shadow: 0 0 0 2px rgba(24,144,255,0.2); }
+  .form-actions { display: flex; gap: 8px; align-items: flex-end; padding-bottom: 0; }
+
+  /* 按钮 */
+  .btn { height: 32px; padding: 0 15px; border-radius: 4px; font-size: 13px; cursor: pointer; border: 1px solid #d9d9d9; background: #fff; color: #333; display: inline-flex; align-items: center; gap: 4px; transition: all 0.3s; }
+  .btn:hover { color: #1890ff; border-color: #1890ff; }
+  .btn-primary { background: #1890ff; border-color: #1890ff; color: #fff; }
+  .btn-primary:hover { background: #40a9ff; border-color: #40a9ff; color: #fff; }
+  .btn-success { background: #52c41a; border-color: #52c41a; color: #fff; }
+  .btn-success:hover { background: #73d13d; border-color: #73d13d; color: #fff; }
+
+  /* 表格 */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th { background: #fafafa; padding: 10px 12px; text-align: center; border: 1px solid #e8e8e8; color: #666; font-weight: 500; }
+  table td { padding: 10px 12px; text-align: center; border: 1px solid #e8e8e8; }
+  table tbody tr:hover { background: #e6f7ff; }
+  .table-actions a { color: #1890ff; cursor: pointer; }
+  .table-actions a:hover { color: #40a9ff; }
+  .table-actions .divider { color: #e8e8e8; margin: 0 6px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 2px; font-size: 12px; background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+
+  /* 分页 */
+  .pagination { display: flex; align-items: center; justify-content: flex-end; margin-top: 16px; gap: 4px; }
+  .pagination .page-btn { width: 28px; height: 28px; border: 1px solid #d9d9d9; border-radius: 4px; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .pagination .page-btn.active { background: #1890ff; border-color: #1890ff; color: #fff; }
+  .pagination .page-btn:disabled { color: #d9d9d9; cursor: not-allowed; }
+  .pagination .total { color: #666; font-size: 13px; margin-right: 12px; }
+  .pagination .page-size { margin-left: 12px; font-size: 13px; }
+
+  /* 页脚 */
+  .footer { text-align: center; padding: 12px; color: #999; font-size: 12px; }
+
+  /* 背景 */
+  .main-layout { background: #f0f2f5; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="layout">
+    <!-- 侧边栏 -->
+    <aside class="sider">
+      <div class="logo">
+        <a href="#">
+          <img src="../素材/货源管理_本地版_files/logo-white.be473d73.png" alt="logo" onerror="this.style.display='none'">
+          <h1>游戏交易管理后台</h1>
+        </a>
+        <div class="nav-search" style="margin-top:12px;position:relative;">
+          <input type="text" placeholder="菜单名称" style="width:100%;height:32px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:4px;padding:0 8px;color:#fff;font-size:13px;">
+        </div>
+      </div>
+
+      <div class="sider-menu">
+        <!-- 首页 -->
+        <div class="menu-item"><span class="submenu-icon">☁</span>首页</div>
+
+        <!-- 游戏管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">🪪</span>游戏管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 用户管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">👤</span>用户管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 订单管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">📋</span>订单管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 退款管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">💰</span>退款管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 商品管理 (展开) -->
+        <div class="submenu">
+          <div class="submenu-title" onclick="toggleSubmenu(this.parentElement)" style="color:#fff;">
+            <span><span class="submenu-icon">🛒</span>商品管理</span>
+            <span class="arrow open">▶</span>
+          </div>
+          <div class="submenu-children open">
+            <div class="menu-item">商品管理</div>
+            <div class="menu-item">供货商管理</div>
+            <div class="menu-item active">货源管理</div>
+          </div>
+        </div>
+
+        <!-- 支付渠道配置 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">💳</span>支付渠道配置</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 帮助中心 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">📡</span>帮助中心</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 广告位管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">💡</span>广告位管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 权限管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">⚙</span>权限管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 右侧主体 -->
+    <div class="main-layout">
+      <!-- 顶部栏 -->
+      <header class="header">
+        <div class="header-left">
+          <span class="trigger" onclick="toggleSidebar()">☰</span>
+        </div>
+        <div class="header-right">
+          <div class="user-info">
+            <span class="avatar">邓</span>
+            <span>欢迎您，邓辉</span>
+          </div>
+          <span class="logout">🚪 退出登录</span>
+        </div>
+      </header>
+
+      <!-- 标签页 -->
+      <div class="tabs-bar">
+        <div class="tab-item"><span>首页</span><span class="tab-close">✕</span></div>
+        <div class="tab-item active"><span>货源管理</span><span class="tab-close">✕</span></div>
+      </div>
+
+      <!-- 主内容 -->
+      <div class="content">
+        <div class="card">
+          <!-- 搜索区域 -->
+          <div class="search-form">
+            <div class="form-row">
+              <div class="form-item">
+                <label>商品名称</label>
+                <input type="text" placeholder="请输入">
+              </div>
+              <div class="form-item">
+                <label>历史库存</label>
+                <input type="text" placeholder="请选择库存时间">
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-primary">导 出</button>
+                <button class="btn btn-primary">🔍 查询</button>
+                <button class="btn">🔄 重置</button>
+                <button class="btn btn-success">＋ 新增</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 表格 -->
+          <table>
+            <thead>
+              <tr>
+                <th style="width:300px;">操作</th>
+                <th>商品ID</th>
+                <th>商品名称</th>
+                <th>商品库存</th>
+                <th>商品类型</th>
+                <th>状态</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="table-actions">
+                  <a>编辑</a><span class="divider">|</span>
+                  <a>禁用</a><span class="divider">|</span>
+                  <a>批次管理</a><span class="divider">|</span>
+                  <a>库存管理</a>
+                </td>
+                <td>29</td>
+                <td>台湾mycard点数50</td>
+                <td>15</td>
+                <td>CDK</td>
+                <td><span class="badge">已启用</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 分页 -->
+          <div class="pagination">
+            <span class="total">1-1 共1条</span>
+            <button class="page-btn" disabled>◀</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn" disabled>▶</button>
+            <span class="page-size">10 条/页 ▼</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 页脚 -->
+      <div class="footer">
+        Copyright © 2019 NN运营
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 侧边栏子菜单展开/收起
+  function toggleSubmenu(el) {
+    var children = el.querySelector('.submenu-children');
+    var arrow = el.querySelector('.arrow');
+    if (children && arrow) {
+      children.classList.toggle('open');
+      arrow.classList.toggle('open');
+    }
+  }
+
+  // 侧边栏收起（演示用）
+  function toggleSidebar() {
+    var sider = document.querySelector('.sider');
+    if (sider.style.display === 'none') {
+      sider.style.display = '';
+    } else {
+      sider.style.display = 'none';
+    }
+  }
+
+  // 菜单点击高亮
+  document.querySelectorAll('.menu-item').forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.querySelectorAll('.menu-item').forEach(function(i) { i.classList.remove('active'); });
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

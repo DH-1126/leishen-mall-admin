@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)https://test-manage.leigodgame.com/#/goods/goodsSource/?supplierId=3 -->
+<html lang="zh-cmn-Hans" class=" "><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>货源管理 · 游戏交易管理后台</title><link rel="icon" href="https://test-manage.leigodgame.com/logo.png"><script src="./货源管理 · 游戏交易管理后台_files/polyfill_7_2_5.js"></script><style>html,
+    body,
+    #app {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    .chromeframe {
+      margin: 0.2em 0;
+      background: #ccc;
+      color: #000;
+      padding: 0.2em 0;
+    }
+
+    #loader-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 999999;
+    }
+
+    #loader {
+      display: block;
+      position: relative;
+      left: 50%;
+      top: 50%;
+      width: 120px;
+      height: 120px;
+      margin: -75px 0 0 -75px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      /* COLOR 1 */
+      border-top-color: #FFF;
+      -webkit-animation: spin 2s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -ms-animation: spin 2s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -moz-animation: spin 2s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -o-animation: spin 2s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      animation: spin 2s linear infinite;
+      /* Chrome, Firefox 16+, IE 10+, Opera */
+      z-index: 1001;
+    }
+
+    #loader:before {
+      content: "";
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      /* COLOR 2 */
+      border-top-color: #FFF;
+      -webkit-animation: spin 3s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -moz-animation: spin 3s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -o-animation: spin 3s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -ms-animation: spin 3s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      animation: spin 3s linear infinite;
+      /* Chrome, Firefox 16+, IE 10+, Opera */
+    }
+
+    #loader:after {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      bottom: 15px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: #FFF;
+      /* COLOR 3 */
+      -moz-animation: spin 1.5s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -o-animation: spin 1.5s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -ms-animation: spin 1.5s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      -webkit-animation: spin 1.5s linear infinite;
+      /* Chrome, Opera 15+, Safari 5+ */
+      animation: spin 1.5s linear infinite;
+      /* Chrome, Firefox 16+, IE 10+, Opera */
+    }
+
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+        /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);
+        /* IE 9 */
+        transform: rotate(0deg);
+        /* Firefox 16+, IE 10+, Opera */
+      }
+
+      100% {
+        -webkit-transform: rotate(360deg);
+        /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(360deg);
+        /* IE 9 */
+        transform: rotate(360deg);
+        /* Firefox 16+, IE 10+, Opera */
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+        /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);
+        /* IE 9 */
+        transform: rotate(0deg);
+        /* Firefox 16+, IE 10+, Opera */
+      }
+
+      100% {
+        -webkit-transform: rotate(360deg);
+        /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(360deg);
+        /* IE 9 */
+        transform: rotate(360deg);
+        /* Firefox 16+, IE 10+, Opera */
+      }
+    }
+
+    #loader-wrapper .loader-section {
+      position: fixed;
+      top: 0;
+      width: 51%;
+      height: 100%;
+      background: #49a9ee;
+      /* Old browsers */
+      z-index: 1000;
+      -webkit-transform: translateX(0);
+      /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateX(0);
+      /* IE 9 */
+      transform: translateX(0);
+      /* Firefox 16+, IE 10+, Opera */
+    }
+
+    #loader-wrapper .loader-section.section-left {
+      left: 0;
+    }
+
+    #loader-wrapper .loader-section.section-right {
+      right: 0;
+    }
+
+    /* Loaded */
+    .loaded #loader-wrapper .loader-section.section-left {
+      -webkit-transform: translateX(-100%);
+      /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateX(-100%);
+      /* IE 9 */
+      transform: translateX(-100%);
+      /* Firefox 16+, IE 10+, Opera */
+      -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+      transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+    }
+
+    .loaded #loader-wrapper .loader-section.section-right {
+      -webkit-transform: translateX(100%);
+      /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateX(100%);
+      /* IE 9 */
+      transform: translateX(100%);
+      /* Firefox 16+, IE 10+, Opera */
+      -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+      transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+    }
+
+    .loaded #loader {
+      opacity: 0;
+      -webkit-transition: all 0.3s ease-out;
+      transition: all 0.3s ease-out;
+    }
+
+    .loaded #loader-wrapper {
+      visibility: hidden;
+      -webkit-transform: translateY(-100%);
+      /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateY(-100%);
+      /* IE 9 */
+      transform: translateY(-100%);
+      /* Firefox 16+, IE 10+, Opera */
+      -webkit-transition: all 0.3s 1s ease-out;
+      transition: all 0.3s 1s ease-out;
+    }
+
+    /* JavaScript Turned Off */
+    .no-js #loader-wrapper {
+      display: none;
+    }
+
+    .no-js h1 {
+      color: #222222;
+    }
+
+    #loader-wrapper .load_title {
+      font-family: 'Open Sans';
+      color: #FFF;
+      font-size: 14px;
+      width: 100%;
+      text-align: center;
+      z-index: 9999999999999;
+      position: absolute;
+      top: 60%;
+      opacity: 1;
+      line-height: 30px;
+    }
+
+    #loader-wrapper .load_title span {
+      font-weight: normal;
+      font-style: italic;
+      font-size: 14px;
+      color: #FFF;
+      opacity: 0.5;
+    }
+
+    /* 滚动条优化 start */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f6f6f6;
+      border-radius: 2px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cdcdcd;
+      border-radius: 2px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #747474;
+    }
+
+    ::-webkit-scrollbar-corner {
+      background: #f6f6f6;
+    }
+
+    /* 滚动条优化 end */</style><script>window._CONFIG = {}
+    window._CONFIG['domianURL'] = '/leigodmall-pro-boot'
+    window._CONFIG['casPrefixUrl'] = 'http://cas.example.org:8443/cas'
+    window._CONFIG['onlinePreviewDomainURL'] = 'http://fileview.jeecg.com/onlinePreview'
+    window._CONFIG['staticDomainURL'] = window._CONFIG['domianURL'] + '/sys/common/static'
+    window._CONFIG['pdfDomainURL'] = window._CONFIG['domianURL'] + '/sys/common/pdf/pdfPreviewIframe'</script><link href="./货源管理 · 游戏交易管理后台_files/chunk-vendors.89bcbb63.css" rel="stylesheet"><link href="./货源管理 · 游戏交易管理后台_files/index.d455aff5.css" rel="stylesheet"><link rel="stylesheet" type="text/css" href="./货源管理 · 游戏交易管理后台_files/chunk-74918062.259fca66.css"><script charset="utf-8" src="./货源管理 · 游戏交易管理后台_files/chunk-74918062.b1c76b62.js"></script><script charset="utf-8" src="./货源管理 · 游戏交易管理后台_files/chunk-2d0e504c.d8a52575.js"></script><link rel="stylesheet" type="text/css" href="./货源管理 · 游戏交易管理后台_files/chunk-74925bce.414444d7.css"><script charset="utf-8" src="./货源管理 · 游戏交易管理后台_files/chunk-74925bce.75e21ce5.js"></script><link rel="stylesheet" type="text/css" href="./货源管理 · 游戏交易管理后台_files/user.1d15be57.css"><script charset="utf-8" src="./货源管理 · 游戏交易管理后台_files/user.128a8cff.js"></script><link rel="stylesheet" type="text/css" href="./货源管理 · 游戏交易管理后台_files/chunk-50b92929.898253e0.css"><script charset="utf-8" src="./货源管理 · 游戏交易管理后台_files/chunk-50b92929.1efe9d83.js"></script><script charset="utf-8" src="./货源管理 · 游戏交易管理后台_files/chunk-fbbae5b4.b775b30d.js"></script><link rel="stylesheet" type="text/css" href="./货源管理 · 游戏交易管理后台_files/chunk-9dd45fda.3d7401d1.css"><script charset="utf-8" src="./货源管理 · 游戏交易管理后台_files/chunk-9dd45fda.7c595baa.js"></script><script charset="utf-8" src="./货源管理 · 游戏交易管理后台_files/chunk-2d0be333.936b9d04.js"></script><link rel="stylesheet" type="text/css" href="./货源管理 · 游戏交易管理后台_files/chunk-24122ed4.6fbe452a.css"><script charset="utf-8" src="./货源管理 · 游戏交易管理后台_files/chunk-24122ed4.678228c8.js"></script></head><body class="" style=""><div id="app"><section class="layout ant-layout ant-layout-has-sider desktop"><aside data-v-33774b2b="" class="ant-layout-sider ant-layout-sider-dark sider dark" style="flex: 0 0 230px; max-width: 230px; min-width: 230px; width: 230px;"><div class="ant-layout-sider-children"><div data-v-bd701278="" data-v-33774b2b="" class="logo" style="height: auto !important;"><a data-v-bd701278="" href="https://test-manage.leigodgame.com/#/" class="router-link-active"><img data-v-bd701278="" src="./货源管理 · 游戏交易管理后台_files/logo-white.be473d73.png" alt="logo"><h1 data-v-bd701278="">游戏交易管理后台</h1></a><span data-v-33774b2b="" class="ant-input-affix-wrapper ant-input-search nav-search-input" data-v-bd701278=""><input placeholder="菜单名称" type="text" class="ant-input"><span class="ant-input-suffix"><i aria-label="图标: search" tabindex="-1" class="anticon anticon-search ant-input-search-icon"><svg viewBox="64 64 896 896" data-icon="search" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0 0 11.6 0l43.6-43.5a8.2 8.2 0 0 0 0-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"></path></svg></i></span></span></div><ul data-v-33774b2b="" role="menu" class="ant-menu ant-menu-inline ant-menu-root ant-menu-dark" style="padding: 0px;"><li role="menuitem" class="ant-menu-item" style="padding-left: 24px;"><a href="https://test-manage.leigodgame.com/dashboard/analysis" class=""><i aria-label="图标: cloud" class="anticon anticon-cloud"><svg viewBox="64 64 896 896" data-icon="cloud" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M811.4 418.7C765.6 297.9 648.9 212 512.2 212S258.8 297.8 213 418.6C127.3 441.1 64 519.1 64 612c0 110.5 89.5 200 199.9 200h496.2C870.5 812 960 722.5 960 612c0-92.7-63.1-170.7-148.6-193.3zm36.3 281a123.07 123.07 0 0 1-87.6 36.3H263.9c-33.1 0-64.2-12.9-87.6-36.3A123.3 123.3 0 0 1 140 612c0-28 9.1-54.3 26.2-76.3a125.7 125.7 0 0 1 66.1-43.7l37.9-9.9 13.9-36.6c8.6-22.8 20.6-44.1 35.7-63.4a245.6 245.6 0 0 1 52.4-49.9c41.1-28.9 89.5-44.2 140-44.2s98.9 15.3 140 44.2c19.9 14 37.5 30.8 52.4 49.9 15.1 19.3 27.1 40.7 35.7 63.4l13.8 36.5 37.8 10c54.3 14.5 92.1 63.8 92.1 120 0 33.1-12.9 64.3-36.3 87.7z"></path></svg></i><span>首页</span></a></li><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-inline"><div aria-haspopup="true" class="ant-menu-submenu-title" style="padding-left: 24px;"><span><i aria-label="图标: idcard" class="anticon anticon-idcard"><svg viewBox="64 64 896 896" data-icon="idcard" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-40 632H136V232h752v560zM610.3 476h123.4c1.3 0 2.3-3.6 2.3-8v-48c0-4.4-1-8-2.3-8H610.3c-1.3 0-2.3 3.6-2.3 8v48c0 4.4 1 8 2.3 8zm4.8 144h185.7c3.9 0 7.1-3.6 7.1-8v-48c0-4.4-3.2-8-7.1-8H615.1c-3.9 0-7.1 3.6-7.1 8v48c0 4.4 3.2 8 7.1 8zM224 673h43.9c4.2 0 7.6-3.3 7.9-7.5 3.8-50.5 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H522a8 8 0 0 0 8-8.4c-2.8-53.3-32-99.7-74.6-126.1a111.8 111.8 0 0 0 29.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 0 0-74.6 126.1c-.4 4.6 3.2 8.4 7.8 8.4zm149-262c28.5 0 51.7 23.3 51.7 52s-23.2 52-51.7 52-51.7-23.3-51.7-52 23.2-52 51.7-52z"></path></svg></i><span>游戏管理</span></span><i class="ant-menu-submenu-arrow"></i></div><div></div></li><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-inline"><div aria-haspopup="true" class="ant-menu-submenu-title" style="padding-left: 24px;"><span><i aria-label="图标: user" class="anticon anticon-user"><svg viewBox="64 64 896 896" data-icon="user" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M858.5 763.6a374 374 0 0 0-80.6-119.5 375.63 375.63 0 0 0-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 0 0-80.6 119.5A371.7 371.7 0 0 0 136 901.8a8 8 0 0 0 8 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 0 0 8-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"></path></svg></i><span>用户管理</span></span><i class="ant-menu-submenu-arrow"></i></div><div></div></li><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-inline"><div aria-haspopup="true" class="ant-menu-submenu-title" style="padding-left: 24px;"><span><i aria-label="图标: audit" class="anticon anticon-audit"><svg viewBox="64 64 896 896" data-icon="audit" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M296 250c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h384c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H296zm184 144H296c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8zm-48 458H208V148h560v320c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V108c0-17.7-14.3-32-32-32H168c-17.7 0-32 14.3-32 32v784c0 17.7 14.3 32 32 32h264c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm440-88H728v-36.6c46.3-13.8 80-56.6 80-107.4 0-61.9-50.1-112-112-112s-112 50.1-112 112c0 50.7 33.7 93.6 80 107.4V764H520c-8.8 0-16 7.2-16 16v152c0 8.8 7.2 16 16 16h352c8.8 0 16-7.2 16-16V780c0-8.8-7.2-16-16-16zM646 620c0-27.6 22.4-50 50-50s50 22.4 50 50-22.4 50-50 50-50-22.4-50-50zm180 266H566v-60h260v60z"></path></svg></i><span>订单管理</span></span><i class="ant-menu-submenu-arrow"></i></div><div></div></li><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-inline"><div aria-haspopup="true" class="ant-menu-submenu-title" style="padding-left: 24px;"><span><i aria-label="图标: money-collect" class="anticon anticon-money-collect"><svg viewBox="64 64 896 896" data-icon="money-collect" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M911.5 700.7a8 8 0 0 0-10.3-4.8L840 718.2V180c0-37.6-30.4-68-68-68H252c-37.6 0-68 30.4-68 68v538.2l-61.3-22.3c-.9-.3-1.8-.5-2.7-.5-4.4 0-8 3.6-8 8V763c0 3.3 2.1 6.3 5.3 7.5L501 910.1c7.1 2.6 14.8 2.6 21.9 0l383.8-139.5c3.2-1.2 5.3-4.2 5.3-7.5v-59.6c0-1-.2-1.9-.5-2.8zM512 837.5l-256-93.1V184h512v560.4l-256 93.1zM660.6 312h-54.5c-3 0-5.8 1.7-7.1 4.4l-84.7 168.8H511l-84.7-168.8a8 8 0 0 0-7.1-4.4h-55.7c-1.3 0-2.6.3-3.8 1-3.9 2.1-5.3 7-3.2 10.8l103.9 191.6h-57c-4.4 0-8 3.6-8 8v27.1c0 4.4 3.6 8 8 8h76v39h-76c-4.4 0-8 3.6-8 8v27.1c0 4.4 3.6 8 8 8h76V704c0 4.4 3.6 8 8 8h49.9c4.4 0 8-3.6 8-8v-63.5h76.3c4.4 0 8-3.6 8-8v-27.1c0-4.4-3.6-8-8-8h-76.3v-39h76.3c4.4 0 8-3.6 8-8v-27.1c0-4.4-3.6-8-8-8H564l103.7-191.6c.6-1.2 1-2.5 1-3.8-.1-4.3-3.7-7.9-8.1-7.9z"></path></svg></i><span>退款管理</span></span><i class="ant-menu-submenu-arrow"></i></div><div></div></li><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-inline ant-menu-submenu-open"><div aria-haspopup="true" class="ant-menu-submenu-title" aria-expanded="true" aria-owns="/goods$Menu" style="padding-left: 24px;"><span><i aria-label="图标: shopping-cart" class="anticon anticon-shopping-cart"><svg viewBox="0 0 1024 1024" data-icon="shopping-cart" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M922.9 701.9H327.4l29.9-60.9 496.8-.9c16.8 0 31.2-12 34.2-28.6l68.8-385.1c1.8-10.1-.9-20.5-7.5-28.4a34.99 34.99 0 0 0-26.6-12.5l-632-2.1-5.4-25.4c-3.4-16.2-18-28-34.6-28H96.5a35.3 35.3 0 1 0 0 70.6h125.9L246 312.8l58.1 281.3-74.8 122.1a34.96 34.96 0 0 0-3 36.8c6 11.9 18.1 19.4 31.5 19.4h62.8a102.43 102.43 0 0 0-20.6 61.7c0 56.6 46 102.6 102.6 102.6s102.6-46 102.6-102.6c0-22.3-7.4-44-20.6-61.7h161.1a102.43 102.43 0 0 0-20.6 61.7c0 56.6 46 102.6 102.6 102.6s102.6-46 102.6-102.6c0-22.3-7.4-44-20.6-61.7H923c19.4 0 35.3-15.8 35.3-35.3a35.42 35.42 0 0 0-35.4-35.2zM305.7 253l575.8 1.9-56.4 315.8-452.3.8L305.7 253zm96.9 612.7c-17.4 0-31.6-14.2-31.6-31.6 0-17.4 14.2-31.6 31.6-31.6s31.6 14.2 31.6 31.6a31.6 31.6 0 0 1-31.6 31.6zm325.1 0c-17.4 0-31.6-14.2-31.6-31.6 0-17.4 14.2-31.6 31.6-31.6s31.6 14.2 31.6 31.6a31.6 31.6 0 0 1-31.6 31.6z"></path></svg></i><span>商品管理</span></span><i class="ant-menu-submenu-arrow"></i></div><ul role="menu" class="ant-menu ant-menu-inline ant-menu-sub" style=""><li role="menuitem" class="ant-menu-item" style="padding-left: 48px;"><a href="https://test-manage.leigodgame.com/goodsManager/mallGoodsManager" class=""><span>商品管理</span></a></li><li role="menuitem" class="ant-menu-item" style="padding-left: 48px;"><a href="https://test-manage.leigodgame.com/goods/supplierList" class=""><span>供货商管理</span></a></li><li role="menuitem" class="ant-menu-item" style="padding-left: 48px;"><a href="https://test-manage.leigodgame.com/goodsManager/goodsType" class=""><span>商品分类</span></a></li></ul></li><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-inline"><div aria-haspopup="true" class="ant-menu-submenu-title" style="padding-left: 24px;"><span><i aria-label="图标: pay-circle" class="anticon anticon-pay-circle"><svg viewBox="64 64 896 896" data-icon="pay-circle" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372zm159.6-585h-59.5c-3 0-5.8 1.7-7.1 4.4l-90.6 180H511l-90.6-180a8 8 0 0 0-7.1-4.4h-60.7c-1.3 0-2.6.3-3.8 1-3.9 2.1-5.3 7-3.2 10.9L457 515.7h-61.4c-4.4 0-8 3.6-8 8v29.9c0 4.4 3.6 8 8 8h81.7V603h-81.7c-4.4 0-8 3.6-8 8v29.9c0 4.4 3.6 8 8 8h81.7V717c0 4.4 3.6 8 8 8h54.3c4.4 0 8-3.6 8-8v-68.1h82c4.4 0 8-3.6 8-8V611c0-4.4-3.6-8-8-8h-82v-41.5h82c4.4 0 8-3.6 8-8v-29.9c0-4.4-3.6-8-8-8h-62l111.1-204.8c.6-1.2 1-2.5 1-3.8-.1-4.4-3.7-8-8.1-8z"></path></svg></i><span>支付渠道配置</span></span><i class="ant-menu-submenu-arrow"></i></div><div></div></li><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-inline"><div aria-haspopup="true" class="ant-menu-submenu-title" style="padding-left: 24px;"><span><i aria-label="图标: radar-chart" class="anticon anticon-radar-chart"><svg viewBox="64 64 896 896" data-icon="radar-chart" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M926.8 397.1l-396-288a31.81 31.81 0 0 0-37.6 0l-396 288a31.99 31.99 0 0 0-11.6 35.8l151.3 466a32 32 0 0 0 30.4 22.1h489.5c13.9 0 26.1-8.9 30.4-22.1l151.3-466c4.2-13.2-.5-27.6-11.7-35.8zM838.6 417l-98.5 32-200-144.7V199.9L838.6 417zM466 567.2l-89.1 122.3-55.2-169.2L466 567.2zm-116.3-96.8L484 373.3v140.8l-134.3-43.7zM512 599.2l93.9 128.9H418.1L512 599.2zm28.1-225.9l134.2 97.1L540.1 514V373.3zM558 567.2l144.3-46.9-55.2 169.2L558 567.2zm-74-367.3v104.4L283.9 449l-98.5-32L484 199.9zM169.3 470.8l86.5 28.1 80.4 246.4-53.8 73.9-113.1-348.4zM327.1 853l50.3-69h269.3l50.3 69H327.1zm414.5-33.8l-53.8-73.9 80.4-246.4 86.5-28.1-113.1 348.4z"></path></svg></i><span>帮助中心</span></span><i class="ant-menu-submenu-arrow"></i></div><div></div></li><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-inline"><div aria-haspopup="true" class="ant-menu-submenu-title" style="padding-left: 24px;"><span><i aria-label="图标: bulb" class="anticon anticon-bulb"><svg viewBox="64 64 896 896" data-icon="bulb" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M632 888H392c-4.4 0-8 3.6-8 8v32c0 17.7 14.3 32 32 32h192c17.7 0 32-14.3 32-32v-32c0-4.4-3.6-8-8-8zM512 64c-181.1 0-328 146.9-328 328 0 121.4 66 227.4 164 284.1V792c0 17.7 14.3 32 32 32h264c17.7 0 32-14.3 32-32V676.1c98-56.7 164-162.7 164-284.1 0-181.1-146.9-328-328-328zm127.9 549.8L604 634.6V752H420V634.6l-35.9-20.8C305.4 568.3 256 484.5 256 392c0-141.4 114.6-256 256-256s256 114.6 256 256c0 92.5-49.4 176.3-128.1 221.8z"></path></svg></i><span>广告位管理</span></span><i class="ant-menu-submenu-arrow"></i></div><div></div></li><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-inline"><div aria-haspopup="true" class="ant-menu-submenu-title" style="padding-left: 24px;"><span><i aria-label="图标: setting" class="anticon anticon-setting"><svg viewBox="64 64 896 896" data-icon="setting" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 0 0 9.3-35.2l-.9-2.6a443.74 443.74 0 0 0-79.7-137.9l-1.8-2.1a32.12 32.12 0 0 0-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 0 0-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 0 0-25.8 25.7l-15.8 85.4a351.86 351.86 0 0 0-99 57.4l-81.9-29.1a32 32 0 0 0-35.1 9.5l-1.8 2.1a446.02 446.02 0 0 0-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 0 0-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0 0 35.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0 0 25.8 25.7l2.7.5a449.4 449.4 0 0 0 159 0l2.7-.5a32.05 32.05 0 0 0 25.8-25.7l15.7-85a350 350 0 0 0 99.7-57.6l81.3 28.9a32 32 0 0 0 35.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 0 1-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 0 1-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L781.8 426l6.5 39.9zM512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 0 1 512 614c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 0 1 400 502c0-29.9 11.7-58 32.8-79.2C454 401.6 482.1 390 512 390c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 0 1 624 502c0 29.9-11.7 58-32.8 79.2z"></path></svg></i><span>权限管理</span></span><i class="ant-menu-submenu-arrow"></i></div><div></div></li></ul></div></aside><section class="ant-layout sidemenu content-width-Fixed" style="padding-left: 0px;"><header data-v-63ec3d1c="" class="ant-layout-header ant-header-side-opened" style="padding: 0px;"><div data-v-63ec3d1c="" class="header dark"><i data-v-63ec3d1c="" aria-label="图标: menu-fold" tabindex="-1" class="trigger anticon anticon-menu-fold"><svg viewBox="64 64 896 896" data-icon="menu-fold" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"></path></svg></i><div data-v-6975ee91="" data-v-63ec3d1c="" class="user-wrapper dark"><span data-v-6975ee91="" class="action action-full ant-dropdown-link user-dropdown-menu ant-dropdown-trigger"><span data-v-6975ee91="" class="avatar ant-avatar ant-avatar-sm ant-avatar-circle"><span class="ant-avatar-string" style="opacity: 0;"></span></span><span data-v-6975ee91="">欢迎您，邓辉</span></span><span data-v-6975ee91="" class="action"><a data-v-6975ee91="" href="javascript:;" class="logout_title"><i data-v-6975ee91="" aria-label="图标: logout" class="anticon anticon-logout"><svg viewBox="64 64 896 896" data-icon="logout" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M868 732h-70.3c-4.8 0-9.3 2.1-12.3 5.8-7 8.5-14.5 16.7-22.4 24.5a353.84 353.84 0 0 1-112.7 75.9A352.8 352.8 0 0 1 512.4 866c-47.9 0-94.3-9.4-137.9-27.8a353.84 353.84 0 0 1-112.7-75.9 353.28 353.28 0 0 1-76-112.5C167.3 606.2 158 559.9 158 512s9.4-94.2 27.8-137.8c17.8-42.1 43.4-80 76-112.5s70.5-58.1 112.7-75.9c43.6-18.4 90-27.8 137.9-27.8 47.9 0 94.3 9.3 137.9 27.8 42.2 17.8 80.1 43.4 112.7 75.9 7.9 7.9 15.3 16.1 22.4 24.5 3 3.7 7.6 5.8 12.3 5.8H868c6.3 0 10.2-7 6.7-12.3C798 160.5 663.8 81.6 511.3 82 271.7 82.6 79.6 277.1 82 516.4 84.4 751.9 276.2 942 512.4 942c152.1 0 285.7-78.8 362.3-197.7 3.4-5.3-.4-12.3-6.7-12.3zm88.9-226.3L815 393.7c-5.3-4.2-13-.4-13 6.3v76H488c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h314v76c0 6.7 7.8 10.5 13 6.3l141.9-112a8 8 0 0 0 0-12.6z"></path></svg></i><span data-v-6975ee91="">&nbsp;退出登录</span></a></span></div></div></header><main class="ant-layout-content" style="height: 100%; padding-top: 0px;"><ul data-v-32e5b466="" role="menu" class="contextmenu ant-menu ant-menu-vertical ant-menu-root ant-menu-light" style="left: 0px; top: 0px; z-index: 9999; display: none;"><li data-v-32e5b466="" role="menuitem" class="ant-menu-item"><i data-v-32e5b466="" aria-label="图标: reload" class="anticon anticon-reload"><svg viewBox="64 64 896 896" data-icon="reload" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M909.1 209.3l-56.4 44.1C775.8 155.1 656.2 92 521.9 92 290 92 102.3 279.5 102 511.5 101.7 743.7 289.8 932 521.9 932c181.3 0 335.8-115 394.6-276.1 1.5-4.2-.7-8.9-4.9-10.3l-56.7-19.5a8 8 0 0 0-10.1 4.8c-1.8 5-3.8 10-5.9 14.9-17.3 41-42.1 77.8-73.7 109.4A344.77 344.77 0 0 1 655.9 829c-42.3 17.9-87.4 27-133.8 27-46.5 0-91.5-9.1-133.8-27A341.5 341.5 0 0 1 279 755.2a342.16 342.16 0 0 1-73.7-109.4c-17.9-42.4-27-87.4-27-133.9s9.1-91.5 27-133.9c17.3-41 42.1-77.8 73.7-109.4 31.6-31.6 68.4-56.4 109.3-73.8 42.3-17.9 87.4-27 133.8-27 46.5 0 91.5 9.1 133.8 27a341.5 341.5 0 0 1 109.3 73.8c9.9 9.9 19.2 20.4 27.8 31.4l-60.2 47a8 8 0 0 0 3 14.1l175.6 43c5 1.2 9.9-2.6 9.9-7.7l.8-180.9c-.1-6.6-7.8-10.3-13-6.2z"></path></svg></i>刷 新
+  </li><li data-v-32e5b466="" role="menuitem" class="ant-menu-item"><i data-v-32e5b466="" aria-label="图标: arrow-left" class="anticon anticon-arrow-left"><svg viewBox="64 64 896 896" data-icon="arrow-left" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M872 474H286.9l350.2-304c5.6-4.9 2.2-14-5.2-14h-88.5c-3.9 0-7.6 1.4-10.5 3.9L155 487.8a31.96 31.96 0 0 0 0 48.3L535.1 866c1.5 1.3 3.3 2 5.2 2h91.5c7.4 0 10.8-9.2 5.2-14L286.9 550H872c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z"></path></svg></i>关闭左侧
+  </li><li data-v-32e5b466="" role="menuitem" class="ant-menu-item"><i data-v-32e5b466="" aria-label="图标: arrow-right" class="anticon anticon-arrow-right"><svg viewBox="64 64 896 896" data-icon="arrow-right" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M869 487.8L491.2 159.9c-2.9-2.5-6.6-3.9-10.5-3.9h-88.5c-7.4 0-10.8 9.2-5.2 14l350.2 304H152c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h585.1L386.9 854c-5.6 4.9-2.2 14 5.2 14h91.5c1.9 0 3.8-.7 5.2-2L869 536.2a32.07 32.07 0 0 0 0-48.4z"></path></svg></i>关闭右侧
+  </li><li data-v-32e5b466="" role="menuitem" class="ant-menu-item"><i data-v-32e5b466="" aria-label="图标: close" class="anticon anticon-close"><svg viewBox="64 64 896 896" data-icon="close" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 0 0 203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"></path></svg></i>关闭其它
+  </li></ul><div class="tab-layout-tabs ant-tabs ant-tabs-top ant-tabs-card ant-tabs-editable-card ant-tabs-no-animation" style="height: 52px;"><div role="tablist" tabindex="0" class="ant-tabs-bar ant-tabs-top-bar ant-tabs-card-bar"><div class="ant-tabs-nav-container"><span unselectable="unselectable" class="ant-tabs-tab-prev ant-tabs-tab-btn-disabled"><span class="ant-tabs-tab-prev-icon"><i aria-label="图标: left" class="anticon anticon-left ant-tabs-tab-prev-icon-target"><svg viewBox="64 64 896 896" data-icon="left" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 0 0 0 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"></path></svg></i></span></span><span unselectable="unselectable" class="ant-tabs-tab-next ant-tabs-tab-btn-disabled"><span class="ant-tabs-tab-next-icon"><i aria-label="图标: right" class="anticon anticon-right ant-tabs-tab-next-icon-target"><svg viewBox="64 64 896 896" data-icon="right" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M765.7 486.8L314.9 134.7A7.97 7.97 0 0 0 302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 0 0 0-50.4z"></path></svg></i></span></span><div class="ant-tabs-nav-wrap"><div class="ant-tabs-nav-scroll"><div class="ant-tabs-nav ant-tabs-nav-animated"><div><div role="tab" aria-disabled="false" aria-selected="false" class=" ant-tabs-tab"><div><span pagekey="/dashboard/analysis">首页</span><i aria-label="图标: close" tabindex="-1" class="anticon anticon-close ant-tabs-close-x"><svg viewBox="64 64 896 896" data-icon="close" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 0 0 203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"></path></svg></i></div></div><div role="tab" aria-disabled="false" aria-selected="true" class="ant-tabs-tab-active ant-tabs-tab"><div><span pagekey="/goods/goodsSource/?supplierId=3">货源管理</span><i aria-label="图标: close" tabindex="-1" class="anticon anticon-close ant-tabs-close-x"><svg viewBox="64 64 896 896" data-icon="close" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 0 0 203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"></path></svg></i></div></div></div><div class="ant-tabs-ink-bar ant-tabs-ink-bar-animated" style="display: block; transform: translate3d(86px, 0px, 0px); width: 104px;"></div></div></div></div></div></div><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div><div class="ant-tabs-content ant-tabs-content-no-animated ant-tabs-top-content ant-tabs-card-content"><div role="tabpanel" aria-hidden="true" class="ant-tabs-tabpane ant-tabs-tabpane-inactive" id="/dashboard/analysis"></div><div role="tabpanel" aria-hidden="false" class="ant-tabs-tabpane ant-tabs-tabpane-active" id="/goods/goodsSource/?supplierId=3"><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div></div></div><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div></div><div style="margin: 12px 12px 0px;"><div class="main"><div class="ant-card"><div class="ant-card-body"><div class="table-page-search-wrapper"><form class="ant-form ant-form-inline"><div class="ant-row" style="margin-left: -12px; margin-right: -12px;"><div class="ant-col ant-col-sm-24 ant-col-md-6" style="padding-left: 12px; padding-right: 12px;"><div class="ant-row ant-form-item"><div class="ant-col ant-form-item-label"><label title="商品名称" class="">商品名称</label></div><div class="ant-col ant-form-item-control-wrapper"><div class="ant-form-item-control"><span class="ant-form-item-children"><input placeholder="请输入" type="text" class="ant-input"></span><!----></div></div></div></div><div class="ant-col ant-col-sm-24 ant-col-md-6" style="padding-left: 12px; padding-right: 12px;"><div class="ant-row ant-form-item"><div class="ant-col ant-form-item-label"><label title="历史库存" class="">历史库存</label></div><div class="ant-col ant-form-item-control-wrapper"><div class="ant-form-item-control"><span class="ant-form-item-children"><span class="ant-calendar-picker" style="width: 100%;"><div class=""><input readonly="true" placeholder="请选择库存时间" class="ant-calendar-picker-input ant-input"><i aria-label="图标: calendar" class="anticon anticon-calendar ant-calendar-picker-icon"><svg viewBox="64 64 896 896" data-icon="calendar" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z"></path></svg></i></div></span></span><!----></div></div></div></div><div class="ant-col ant-col-sm-24 ant-col-md-6" style="padding-left: 12px; padding-right: 12px;"><button type="button" class="ant-btn ant-btn-primary"><span>导 出</span></button><button type="button" class="ant-btn ant-btn-primary" style="margin: 0px 12px;"><i aria-label="图标: search" class="anticon anticon-search"><svg viewBox="64 64 896 896" data-icon="search" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0 0 11.6 0l43.6-43.5a8.2 8.2 0 0 0 0-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"></path></svg></i><span>查询</span></button><button type="button" class="ant-btn ant-btn-default" style="margin-right: 12px;"><i aria-label="图标: reload" class="anticon anticon-reload"><svg viewBox="64 64 896 896" data-icon="reload" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M909.1 209.3l-56.4 44.1C775.8 155.1 656.2 92 521.9 92 290 92 102.3 279.5 102 511.5 101.7 743.7 289.8 932 521.9 932c181.3 0 335.8-115 394.6-276.1 1.5-4.2-.7-8.9-4.9-10.3l-56.7-19.5a8 8 0 0 0-10.1 4.8c-1.8 5-3.8 10-5.9 14.9-17.3 41-42.1 77.8-73.7 109.4A344.77 344.77 0 0 1 655.9 829c-42.3 17.9-87.4 27-133.8 27-46.5 0-91.5-9.1-133.8-27A341.5 341.5 0 0 1 279 755.2a342.16 342.16 0 0 1-73.7-109.4c-17.9-42.4-27-87.4-27-133.9s9.1-91.5 27-133.9c17.3-41 42.1-77.8 73.7-109.4 31.6-31.6 68.4-56.4 109.3-73.8 42.3-17.9 87.4-27 133.8-27 46.5 0 91.5 9.1 133.8 27a341.5 341.5 0 0 1 109.3 73.8c9.9 9.9 19.2 20.4 27.8 31.4l-60.2 47a8 8 0 0 0 3 14.1l175.6 43c5 1.2 9.9-2.6 9.9-7.7l.8-180.9c-.1-6.6-7.8-10.3-13-6.2z"></path></svg></i><span>重置</span></button><button type="button" class="ant-btn-green ant-btn"><i aria-label="图标: plus" class="anticon anticon-plus"><svg viewBox="64 64 896 896" data-icon="plus" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z"></path><path d="M176 474h672q8 0 8 8v60q0 8-8 8H176q-8 0-8-8v-60q0-8 8-8z"></path></svg></i><span>新增</span></button></div></div></form></div><div><div class="j-table-force-nowrap ant-table-wrapper"><div class="ant-spin-nested-loading"><div class="ant-spin-container"><div class="ant-table ant-table-scroll-position-left ant-table-middle ant-table-bordered"><div class="ant-table-content"><!----><div class="ant-table-body"><table class=""><colgroup><col style="width: 300px; min-width: 300px;"><col><col><col><col><col></colgroup><thead class="ant-table-thead"><tr><th key="action" class="ant-table-align-center ant-table-row-cell-break-word" style="text-align: center;"><span class="ant-table-header-column"><div><span class="ant-table-column-title">操作</span><span class="ant-table-column-sorter"></span></div></span></th><th key="mallGoodsId" class="ant-table-align-center" style="text-align: center;"><span class="ant-table-header-column"><div><span class="ant-table-column-title">商品ID</span><span class="ant-table-column-sorter"></span></div></span></th><th key="goodsName" class="ant-table-align-center" style="text-align: center;"><span class="ant-table-header-column"><div><span class="ant-table-column-title">商品名称</span><span class="ant-table-column-sorter"></span></div></span></th><th key="availableStock" class="ant-table-align-center" style="text-align: center;"><span class="ant-table-header-column"><div><span class="ant-table-column-title">商品库存</span><span class="ant-table-column-sorter"></span></div></span></th><th key="cardPasswordType" class="ant-table-align-center" style="text-align: center;"><span class="ant-table-header-column"><div><span class="ant-table-column-title">商品类型</span><span class="ant-table-column-sorter"></span></div></span></th><th key="status" class="ant-table-align-center ant-table-row-cell-last" style="text-align: center;"><span class="ant-table-header-column"><div><span class="ant-table-column-title">状态</span><span class="ant-table-column-sorter"></span></div></span></th></tr></thead><tbody class="ant-table-tbody"><tr class="ant-table-row ant-table-row-level-0" data-row-key="36"><td class="ant-table-row-cell-break-word" style="text-align: center;"><a>编辑</a><div role="separator" class="ant-divider ant-divider-vertical"></div><a>禁用</a><div role="separator" class="ant-divider ant-divider-vertical"></div><a>批次管理</a><div role="separator" class="ant-divider ant-divider-vertical"></div><a>库存管理</a></td><td class="" style="text-align: center;">29</td><td class="" style="text-align: center;">台湾mycard点数50</td><td class="" style="text-align: center;">15</td><td class="" style="text-align: center;">CDK</td><td class="" style="text-align: center;">已启用</td></tr></tbody></table></div></div></div><ul unselectable="unselectable" class="ant-pagination mini ant-table-pagination"><li class="ant-pagination-total-text">1-1 共1条</li><li title="上一页" aria-disabled="true" class="ant-pagination-disabled ant-pagination-prev"><a class="ant-pagination-item-link"><i aria-label="图标: left" class="anticon anticon-left"><svg viewBox="64 64 896 896" data-icon="left" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 0 0 0 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"></path></svg></i></a></li><li title="1" tabindex="0" class="ant-pagination-item ant-pagination-item-1 ant-pagination-item-active"><a>1</a></li><li title="下一页" aria-disabled="true" class="ant-pagination-disabled ant-pagination-next"><a class="ant-pagination-item-link"><i aria-label="图标: right" class="anticon anticon-right"><svg viewBox="64 64 896 896" data-icon="right" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M765.7 486.8L314.9 134.7A7.97 7.97 0 0 0 302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 0 0 0-50.4z"></path></svg></i></a></li><li class="ant-pagination-options"><div tabindex="0" class="ant-select ant-select-enabled ant-select-sm ant-pagination-options-size-changer"><div role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-controls="4cd4a609-af80-49b5-e712-2544d857141e" class="ant-select-selection ant-select-selection--single"><div class="ant-select-selection__rendered"><div title="10 条/页" class="ant-select-selection-selected-value" style="display: block; opacity: 1;">10 条/页</div></div><span unselectable="on" class="ant-select-arrow" style="user-select: none;"><i aria-label="图标: down" class="anticon anticon-down ant-select-arrow-icon"><svg viewBox="64 64 896 896" data-icon="down" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path></svg></i></span></div></div></li></ul></div></div></div></div><!----></div></div><!----></div></div></main><footer class="ant-layout-footer" style="padding: 0px;"><div data-v-48437c40="" class="footer"><div data-v-48437c40="" class="links"></div><div data-v-48437c40="" class="copyright">
+    Copyright
+    <i data-v-48437c40="" aria-label="图标: copyright" class="anticon anticon-copyright"><svg viewBox="64 64 896 896" data-icon="copyright" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false" class=""><path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372zm5.6-532.7c53 0 89 33.8 93 83.4.3 4.2 3.8 7.4 8 7.4h56.7c2.6 0 4.7-2.1 4.7-4.7 0-86.7-68.4-147.4-162.7-147.4C407.4 290 344 364.2 344 486.8v52.3C344 660.8 407.4 734 517.3 734c94 0 162.7-58.8 162.7-141.4 0-2.6-2.1-4.7-4.7-4.7h-56.8c-4.2 0-7.6 3.2-8 7.3-4.2 46.1-40.1 77.8-93 77.8-65.3 0-102.1-47.9-102.1-133.6v-52.6c.1-87 37-135.5 102.2-135.5z"></path></svg></i>
+    2019 <span data-v-48437c40="">NN运营</span></div></div></footer></section></section></div><script src="./货源管理 · 游戏交易管理后台_files/zhAreaData.js"></script><script src="./货源管理 · 游戏交易管理后台_files/chunk-vendors.6a17e91b.js"></script><script src="./货源管理 · 游戏交易管理后台_files/index.3a20c6d3.js"></script><div tabindex="-1" role="dialog" aria-hidden="true" class="pswp"><div class="pswp__bg"></div> <div class="pswp__scroll-wrap"><div class="pswp__container"><div class="pswp__item"></div> <div class="pswp__item"></div> <div class="pswp__item"></div></div> <div class="pswp__ui pswp__ui--hidden"><div class="pswp__top-bar"><div class="pswp__counter"></div> <button title="Close (Esc)" class="pswp__button pswp__button--close"></button> <button title="Share" class="pswp__button pswp__button--share"></button> <button title="Toggle fullscreen" class="pswp__button pswp__button--fs"></button> <button title="Zoom in/out" class="pswp__button pswp__button--zoom"></button> <div class="pswp__preloader"><div class="pswp__preloader__icn"><div class="pswp__preloader__cut"><div class="pswp__preloader__donut"></div></div></div></div></div> <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class="pswp__share-tooltip"></div></div> <button title="Previous (arrow left)" class="pswp__button pswp__button--arrow--left"></button> <button title="Next (arrow right)" class="pswp__button pswp__button--arrow--right"></button> <div class="pswp__caption"><div class="pswp__caption__center"></div></div></div></div></div><div class="ant-notification ant-notification-topRight" style="right: 0px; top: 24px; bottom: auto;"><span></span></div></body></html>
