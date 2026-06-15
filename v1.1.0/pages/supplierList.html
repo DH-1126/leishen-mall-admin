@@ -1,0 +1,85 @@
+<div class="card">
+  <div class="search-form">
+    <div class="form-row">
+      <div class="form-item">
+        <label>供货商</label>
+        <input type="text" placeholder="请输入">
+      </div>
+      <div class="form-item">
+        <label>时间</label>
+        <div class="date-range">
+          <input type="text" placeholder="开始时间" readonly style="width:110px;">
+          <span class="sep">~</span>
+          <input type="text" placeholder="结束时间" readonly style="width:110px;">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary">🔍 查询</button>
+        <button class="btn" style="margin:0 12px;">🔄 重置</button>
+        <button class="btn btn-green" style="margin-right:12px;">＋ 新增</button>
+        <button class="btn btn-primary">导 出</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <colgroup>
+        <col style="width:200px;min-width:200px;">
+        <col><col><col><col><col>
+      </colgroup>
+      <thead>
+        <tr>
+          <th>操作</th>
+          <th>ID</th>
+          <th>供货商</th>
+          <th>合作方式</th>
+          <th>票务类型</th>
+          <th>合同期</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-supplier-id="4" data-supplier-name="福福" data-cooperation="接口">
+          <td class="table-actions">
+            <a onclick="openGoodsTab(4, '福福', '接口')">编辑</a><span class="divider">|</span>
+            <a onclick="openGoodsTab(4, '福福', '接口')">货源列表</a><span class="divider">|</span>
+            <a>删除</a>
+          </td>
+          <td>4</td><td>福福</td><td>接口</td><td>带票</td><td>2026-05-22</td>
+        </tr>
+        <tr data-supplier-id="3" data-supplier-name="新巢科技" data-cooperation="导入">
+          <td class="table-actions">
+            <a onclick="openGoodsTab(3, '新巢科技', '导入')">编辑</a><span class="divider">|</span>
+            <a onclick="openGoodsTab(3, '新巢科技', '导入')">货源管理</a><span class="divider">|</span>
+            <a>删除</a>
+          </td>
+          <td>3</td><td>新巢科技</td><td>导入</td><td>不带票</td><td>2027-04-27</td>
+        </tr>
+        <tr data-supplier-id="2" data-supplier-name="福禄（新）" data-cooperation="接口">
+          <td class="table-actions">
+            <a onclick="openGoodsTab(2, '福禄（新）', '接口')">编辑</a><span class="divider">|</span>
+            <a onclick="openGoodsTab(2, '福禄（新）', '接口')">货源列表</a><span class="divider">|</span>
+            <a>删除</a>
+          </td>
+          <td>2</td><td>福禄（新）</td><td>接口</td><td>带票</td><td>2027-04-23</td>
+        </tr>
+        <tr data-supplier-id="1" data-supplier-name="商店自营" data-cooperation="导入">
+          <td class="table-actions">
+            <a onclick="openGoodsTab(1, '商店自营', '导入')">编辑</a><span class="divider">|</span>
+            <a onclick="openGoodsTab(1, '商店自营', '导入')">货源管理</a><span class="divider">|</span>
+            <a>删除</a>
+          </td>
+          <td>1</td><td>商店自营</td><td>导入</td><td>带票</td><td>2026-10-31</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <span class="total">1-4 共4条</span>
+    <button class="page-btn" disabled>◀</button>
+    <button class="page-btn active">1</button>
+    <button class="page-btn" disabled>▶</button>
+    <span class="page-size">10 条/页 ▼</span>
+  </div>
+</div>

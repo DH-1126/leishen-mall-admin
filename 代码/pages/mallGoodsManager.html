@@ -1,0 +1,41 @@
+<div class="card">
+  <div class="search-form">
+    <div class="form-row">
+      <div class="form-item">
+        <label>商品名称</label>
+        <input type="text" placeholder="请输入" id="mallGoodsFilterName">
+      </div>
+      <div class="form-item">
+        <label>商品状态</label>
+        <select id="mallGoodsFilterStatus">
+          <option value="">全部</option>
+          <option value="上架">上架</option>
+          <option value="下架">下架</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="filterMallGoods()">🔍 查询</button>
+        <button class="btn" style="margin:0 12px;" onclick="resetMallGoodsFilter()">🔄 重置</button>
+        <button class="btn btn-green" onclick="openTab('mallGoodsAdd', '商品新增'); setTimeout(function(){ resetMallGoodsForm(); }, 50);">＋ 新增</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 商品类型筛选 -->
+  <div class="form-row-full" style="margin-bottom:12px;">
+    <div class="form-label">商品类型</div>
+    <div class="form-control">
+      <label style="margin-right:24px;font-size:13px;"><input type="radio" name="mallGoodsFilterType" value="independent" checked onchange="onMallGoodsTypeChange()"> 独立商品</label>
+      <label style="font-size:13px;"><input type="radio" name="mallGoodsFilterType" value="combo" onchange="onMallGoodsTypeChange()"> 组合商品</label>
+    </div>
+  </div>
+
+  <div class="table-wrap" id="mallGoodsTableWrap">
+    <table id="mallGoodsTable">
+      <thead id="mallGoodsTableHead"></thead>
+      <tbody id="mallGoodsTableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="pagination" id="mallGoodsPagination"></div>
+</div>
