@@ -1,0 +1,227 @@
+<div class="card">
+  <div class="page-title" id="mallGoodsAddTitle">商品新增</div>
+
+  <!-- ====== 基础信息 ====== -->
+  <div class="section-title">基础信息</div>
+  <div class="form-grid">
+    <div class="form-item-row">
+      <div class="form-label required">商品名称</div>
+      <div class="form-control"><input type="text" id="mgName" placeholder="商品名称" maxlength="50"></div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">商品子标题</div>
+      <div class="form-control"><input type="text" id="mgSubTitle" placeholder="商品子标题" maxlength="100"></div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label required">绑定游戏类别</div>
+      <div class="form-control">
+        <select id="mgGameCategory" onchange="onGameCategoryChange()">
+          <option value="">请选择游戏类别</option>
+          <option value="1">战争雷霆</option>
+          <option value="2">绝地求生</option>
+          <option value="3">MyCard</option>
+          <option value="4">完蛋!系列</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">版本</div>
+      <div class="form-control"><select id="mgVersion"><option value="">请选择版本</option></select></div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">生效平台</div>
+      <div class="form-control"><select id="mgPlatform"><option value="">请选择生效平台</option></select></div>
+    </div>
+  </div>
+
+  <!-- 生效渠道 -->
+  <div class="channel-section">
+    <div class="channel-label">生效渠道：（可关联多个）</div>
+    <div id="channelRows">
+      <!-- dynamic rows -->
+    </div>
+    <div class="channel-add" onclick="addChannelRow()">＋ 生效渠道添加</div>
+  </div>
+
+  <!-- 商品类型 -->
+  <div class="section-title">商品类型</div>
+  <div class="form-row-full">
+    <div class="form-label required">商品类型</div>
+    <div class="form-control">
+      <label style="margin-right:24px;font-size:13px;"><input type="radio" name="mgGoodsType" value="independent" checked onchange="onGoodsTypeChange()"> 独立商品</label>
+      <label style="font-size:13px;"><input type="radio" name="mgGoodsType" value="combo" onchange="onGoodsTypeChange()"> 组合商品</label>
+    </div>
+  </div>
+
+  <!-- 独立商品字段 -->
+  <div id="independentFields">
+  <div class="form-grid">
+    <div class="form-item-row">
+      <div class="form-label required">账号类型</div>
+      <div class="form-control">
+        <select id="mgAccountType">
+          <option value="">请选择账号类型</option>
+          <option value="CDK">CDK</option>
+          <option value="账号">账号</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label required">货源卡密类型</div>
+      <div class="form-control">
+        <select id="mgSourceKeyType">
+          <option value="">请选择货源卡密类型</option>
+          <option value="CDK">CDK</option>
+          <option value="卡密">卡密</option>
+          <option value="直充">直充</option>
+          <option value="代充">代充</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label required">商品分类</div>
+      <div class="form-control">
+        <select id="mgGoodsCategory">
+          <option value="">请选择商品分类</option>
+          <option value="游戏币">游戏币</option>
+          <option value="枪械">枪械</option>
+          <option value="游戏账号">游戏账号</option>
+          <option value="点数卡">点数卡</option>
+          <option value="DLC">DLC</option>
+          <option value="游戏本体">游戏本体</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">商品子分类</div>
+      <div class="form-control"><select id="mgSubCategory"><option value="">请选择商品子分类</option></select></div>
+    </div>
+  </div>
+  </div>
+
+  <!-- 组合商品字段 -->
+  <div id="comboFields" style="display:none;">
+    <div class="combo-goods-section">
+      <div class="channel-label">勾选商品：（可关联多个）</div>
+      <div id="comboGoodsRows"></div>
+      <div class="channel-add" onclick="addComboGoodsRow()">＋ 添加商品</div>
+    </div>
+    <div class="form-row-full" style="margin-top:16px;">
+      <div class="form-label required">生效时间</div>
+      <div class="form-control">
+        <div class="date-range">
+          <input type="text" placeholder="开始时间" readonly id="mgComboStartDate" style="width:130px;">
+          <span class="sep">~</span>
+          <input type="text" placeholder="结束时间" readonly id="mgComboEndDate" style="width:130px;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 商品信息 ====== -->
+  <div class="section-title">商品信息</div>
+  <div class="form-grid">
+    <div class="form-item-row">
+      <div class="form-label required">人民币售价</div>
+      <div class="form-control">
+        <div class="input-with-suffix"><input type="text" id="mgRmbPrice" placeholder="请输入"><span class="suffix">元</span></div>
+      </div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label required">人民币原价</div>
+      <div class="form-control">
+        <div class="input-with-suffix"><input type="text" id="mgRmbOriginPrice" placeholder="请输入"><span class="suffix">元</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 币种定价 -->
+  <div class="form-grid">
+    <div class="form-item-row">
+      <div class="form-label">雷神币售价</div>
+      <div class="form-control">
+        <div class="input-with-suffix"><input type="text" id="mgLsPrice" placeholder="请输入"><span class="suffix">LS</span></div>
+      </div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">雷神币原价</div>
+      <div class="form-control">
+        <div class="input-with-suffix"><input type="text" id="mgLsOriginPrice" placeholder="请输入"><span class="suffix">LS</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-grid">
+    <div class="form-item-row">
+      <div class="form-label">N币售价</div>
+      <div class="form-control">
+        <div class="input-with-suffix"><input type="text" id="mgNbPrice" placeholder="请输入"><span class="suffix">NB</span></div>
+      </div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">N币原价</div>
+      <div class="form-control">
+        <div class="input-with-suffix"><input type="text" id="mgNbOriginPrice" placeholder="请输入"><span class="suffix">NB</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-grid">
+    <div class="form-item-row">
+      <div class="form-label">单次购买上限</div>
+      <div class="form-control"><input type="text" id="mgPurchaseLimit" placeholder="请输入"></div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">销量展示</div>
+      <div class="form-control"><input type="text" id="mgShowSales" placeholder="请输入"></div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">库存告急值</div>
+      <div class="form-control"><input type="text" id="mgStockAlert" placeholder="请输入"></div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">排序值</div>
+      <div class="form-control"><input type="text" id="mgSort" placeholder="请输入"></div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">状态</div>
+      <div class="form-control">
+        <label style="margin-right:24px;font-size:13px;"><input type="radio" name="mgStatus" value="上架" checked> 启用</label>
+        <label style="font-size:13px;"><input type="radio" name="mgStatus" value="下架"> 禁用</label>
+      </div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">横图样式</div>
+      <div class="form-control">
+        <div class="img-upload-wrap" id="mgBannerImgWrap">
+          <div class="img-upload-btn" onclick="document.getElementById('mgBannerImgInput').click()">
+            <span class="img-upload-plus">＋</span>
+            <span class="img-upload-text">上传</span>
+          </div>
+          <img class="img-upload-preview" id="mgBannerImgPreview" style="display:none;">
+          <input type="file" id="mgBannerImgInput" accept=".jpg,.jpeg,.png" style="display:none;" onchange="previewBannerImg(this)">
+        </div>
+      </div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">商品规格</div>
+      <div class="form-control"><input type="text" id="mgSpec" placeholder="请输入"></div>
+    </div>
+    <div class="form-item-row">
+      <div class="form-label">规格介绍</div>
+      <div class="form-control"><textarea id="mgSpecIntro" placeholder="请输入" rows="3"></textarea></div>
+    </div>
+  </div>
+
+  <!-- 商品详情 -->
+  <div class="form-row-full" style="margin-top:16px;">
+    <div class="form-label">商品详情</div>
+    <div class="form-control">
+      <textarea id="mgGoodsDesc" placeholder="请输入正文" style="min-height:200px;width:100%;border:1px solid #d9d9d9;border-radius:4px;padding:8px 11px;font-size:13px;resize:vertical;box-sizing:border-box;"></textarea>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <button class="btn btn-primary" onclick="saveMallGoods()">提 交</button>
+    <button class="btn" onclick="cancelMallGoodsAdd()">取 消</button>
+  </div>
+</div>

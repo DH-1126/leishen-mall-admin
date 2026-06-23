@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>雷神商城 · 游戏交易管理后台</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <div class="layout">
+    <!-- 侧边栏 -->
+    <aside class="sider">
+      <div class="logo">
+        <a href="#">
+          <img src="../素材/货源管理_本地版_files/logo-white.be473d73.png" alt="logo" onerror="this.style.display='none'">
+          <h1>游戏交易管理后台</h1>
+        </a>
+        <div class="nav-search">
+          <input type="text" placeholder="菜单名称">
+        </div>
+      </div>
+
+      <div class="sider-menu">
+        <!-- 首页 -->
+        <div class="menu-item" data-page="home" onclick="switchMenu(this)"><span class="submenu-icon">☁</span>首页</div>
+
+        <!-- 游戏管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">🪪</span>游戏管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 用户管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">👤</span>用户管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 订单管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">📋</span>订单管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 退款管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">💰</span>退款管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 商品管理 (展开) -->
+        <div class="submenu">
+          <div class="submenu-title" onclick="toggleSubmenu(this.parentElement)" style="color:#fff;">
+            <span><span class="submenu-icon">🛒</span>商品管理</span>
+            <span class="arrow open">▶</span>
+          </div>
+          <div class="submenu-children open">
+            <div class="menu-item active" data-page="mallGoodsManager" onclick="switchMenu(this)">商品管理</div>
+            <div class="menu-item" data-page="supplierList" onclick="switchMenu(this)">供货商管理</div>
+            <div class="menu-item" data-page="goodsType" onclick="switchMenu(this)">商品分类</div>
+            <div class="menu-item" data-page="supplierPromotion" onclick="switchMenu(this)">供货商活动推广</div>
+          </div>
+        </div>
+
+        <!-- 支付渠道配置 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">💳</span>支付渠道配置</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 帮助中心 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">📡</span>帮助中心</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 广告位管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">💡</span>广告位管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+
+        <!-- 权限管理 -->
+        <div class="submenu" onclick="toggleSubmenu(this)">
+          <div class="submenu-title"><span><span class="submenu-icon">⚙</span>权限管理</span><span class="arrow">▶</span></div>
+          <div class="submenu-children"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 右侧主体 -->
+    <div class="main-layout">
+      <!-- 顶部栏 -->
+      <header class="header">
+        <div class="header-left">
+          <span class="trigger" onclick="toggleSidebar()">☰</span>
+        </div>
+        <div class="header-right">
+          <div class="user-info">
+            <span class="avatar">邓</span>
+            <span>欢迎您，邓辉</span>
+          </div>
+          <span class="logout">🚪 退出登录</span>
+        </div>
+      </header>
+
+      <!-- 标签页 -->
+      <div class="tabs-bar" id="tabsBar">
+        <div class="tab-item active" data-tab="home"><span>首页</span><span class="tab-close" onclick="closeTab(event, 'home')">✕</span></div>
+        <div class="tab-item" data-tab="mallGoodsManager"><span>商品管理</span><span class="tab-close" onclick="closeTab(event, 'mallGoodsManager')">✕</span></div>
+      </div>
+
+      <!-- 主内容 -->
+      <div class="content">
+        <div class="page" id="page-home"></div>
+        <div class="page" id="page-supplierList"></div>
+        <div class="page" id="page-mallGoodsManager"></div>
+        <div class="page" id="page-goodsType"></div>
+        <div class="page" id="page-supplierPromotion"></div>
+        <div class="page" id="page-mallGoodsAdd"></div>
+
+        <!-- 活动推广弹窗（全局） -->
+        <div class="modal-mask" id="promoModal" style="display:none;" onclick="if(event.target===this)closePromoModal()">
+          <div class="modal-wrap">
+            <div class="modal-header">
+              <span class="modal-title" id="promoModalTitle">新增活动推广</span>
+              <span class="modal-close" onclick="closePromoModal()">✕</span>
+            </div>
+            <div class="modal-body">
+              <div class="modal-form-item">
+                <div class="form-label required">活动名称</div>
+                <div class="form-control"><input type="text" id="promoName" placeholder="请输入活动名称" maxlength="50"></div>
+              </div>
+              <div class="modal-form-item">
+                <div class="form-label required">关联供应商</div>
+                <div class="form-control">
+                  <div class="custom-select" id="promoSupplierSelect">
+                    <div class="custom-select-trigger" onclick="toggleSupplierDropdown()">
+                      <span class="trigger-text" id="promoSupplierText">请选择供应商</span>
+                      <span class="arrow" id="promoSupplierArrow">▼</span>
+                    </div>
+                    <div class="custom-select-dropdown" id="promoSupplierDropdown"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-form-item">
+                <div class="form-label required">关联货源</div>
+                <div class="form-control">
+                  <div class="custom-select" id="promoGoodsMultiWrap">
+                    <div class="custom-select-trigger" onclick="toggleGoodsDropdown()">
+                      <span class="trigger-text" id="promoGoodsText">请选择货源</span>
+                      <span class="arrow" id="promoGoodsArrow">▼</span>
+                    </div>
+                    <div class="custom-select-dropdown" id="promoGoodsDropdown"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-form-item">
+                <div class="form-label required">活动时间</div>
+                <div class="form-control">
+                  <div class="date-range">
+                    <input type="text" placeholder="开始时间" readonly id="promoStartDate" style="width:110px;">
+                    <span class="sep">~</span>
+                    <input type="text" placeholder="结束时间" readonly id="promoEndDate" style="width:110px;">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-form-item">
+                <div class="form-label">折扣</div>
+                <div class="form-control" style="display:flex;align-items:center;gap:4px;">
+                  <input type="text" id="promoDiscount" placeholder="请输入折扣" style="width:160px;">
+                  <span style="color:#666;font-size:13px;">折</span>
+                </div>
+              </div>
+              <div class="modal-form-item">
+                <div class="form-label">状态</div>
+                <div class="form-control">
+                  <label style="margin-right:24px;font-size:13px;"><input type="radio" name="promoStatus" value="启用" checked> 启用</label>
+                  <label style="font-size:13px;"><input type="radio" name="promoStatus" value="禁用"> 禁用</label>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" onclick="closePromoModal()">关 闭</button>
+              <button class="btn btn-primary" onclick="savePromotion()">确 定</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 动态页面容器 -->
+        <div id="dynamicPages"></div>
+      </div>
+
+      <!-- 页脚 -->
+      <div class="footer">Copyright © 2019 NN运营</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
