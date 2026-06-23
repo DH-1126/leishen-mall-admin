@@ -92,7 +92,7 @@ function loadPageContent(tabId) {
 
   pageEl.innerHTML = '<div class="page-loading">加载中...</div>';
 
-  fetch('pages/' + tabId + '.html')
+  fetch('pages/' + tabId + '.html?v=' + Date.now())
     .then(function(r) {
       if (!r.ok) throw new Error('Page not found: ' + tabId);
       return r.text();
@@ -110,7 +110,7 @@ function loadPageContent(tabId) {
 
 function afterPageLoad(tabId) {
   if (tabId === 'supplierPromotion') { renderPromoTable(); }
-  if (tabId === 'mallGoodsManager') { renderMallGoodsTable(mallGoodsFilterName, mallGoodsFilterStatus, 0); }
+  if (tabId === 'mallGoodsManager') { populateMallGoodsStatusDropdown(); renderMallGoodsTable(mallGoodsFilterName, mallGoodsFilterStatus, 0); }
   if (tabId === 'mallGoodsAdd') { initMallGoodsFormOptions(); }
 }
 
@@ -338,11 +338,16 @@ var mallGoods = [
   { id: 9, name: '绝地求生-Ps版', subTitle: '', gameCategoryId: 2, version: '', platform: '', channels: [], accountType: 'CDK', sourceKeyType: 'CDK', goodsCategory: '游戏本体', subCategory: '', supplierId: 1, supplierName: '商店自营', sort: 9, rmbPrice: 259.00, rmbOriginPrice: 329.00, currencies: [{currencyType:'NB',sellPrice:'2590',originalPrice:'3290'},{currencyType:'LS',sellPrice:'259',originalPrice:'329'}], nCoinPrice: 2590, lsCoinPrice: 259, purchaseLimit: 3, showSales: 198, stockAlert: 3, stock: 26, sales: 198, status: '上架', spec: '', specIntro: '', goodsDesc: '', bannerImg: null },
   { id: 10, name: '绝地求生-Xbox版', subTitle: '', gameCategoryId: 2, version: '', platform: '', channels: [], accountType: 'CDK', sourceKeyType: 'CDK', goodsCategory: '游戏本体', subCategory: '', supplierId: 1, supplierName: '商店自营', sort: 10, rmbPrice: 239.00, rmbOriginPrice: 299.00, currencies: [{currencyType:'NB',sellPrice:'2390',originalPrice:'2990'},{currencyType:'LS',sellPrice:'239',originalPrice:'299'}], nCoinPrice: 2390, lsCoinPrice: 239, purchaseLimit: 3, showSales: 76, stockAlert: 3, stock: 27, sales: 76, status: '下架', spec: '', specIntro: '', goodsDesc: '', bannerImg: null },
   // 组合商品
-  { id: 11, name: '绝地求生大礼包', subTitle: '', gameCategoryId: 2, goodsType: 'combo', version: '', platform: '', channels: [], accountType: '', sourceKeyType: '', goodsCategory: '', subCategory: '', supplierId: 1, supplierName: '商店自营', sort: 11, rmbPrice: 500.00, rmbOriginPrice: 700.00, currencies: [{currencyType:'NB',sellPrice:'5000',originalPrice:'7000'},{currencyType:'LS',sellPrice:'500',originalPrice:'700'}], nCoinPrice: 5000, lsCoinPrice: 500, comboGoods: [{goodsId:5,goodsName:'绝地求生-豪华版'},{goodsId:9,goodsName:'绝地求生-Ps版'}], comboStartDate: '2026-06-01', comboEndDate: '2026-12-31', purchaseLimit: 1, showSales: 42, stockAlert: 3, stock: 15, sales: 42, status: '上架', spec: '', specIntro: '', goodsDesc: '', bannerImg: null },
-  { id: 12, name: '枪械收藏套装', subTitle: '', gameCategoryId: 2, goodsType: 'combo', version: '', platform: '', channels: [], accountType: '', sourceKeyType: '', goodsCategory: '', subCategory: '', supplierId: 1, supplierName: '商店自营', sort: 12, rmbPrice: 350.00, rmbOriginPrice: 500.00, currencies: [{currencyType:'NB',sellPrice:'3500',originalPrice:'5000'},{currencyType:'LS',sellPrice:'350',originalPrice:'500'}], nCoinPrice: 3500, lsCoinPrice: 350, comboGoods: [{goodsId:2,goodsName:'枪械-莫辛纳甘'},{goodsId:3,goodsName:'枪械-98K'},{goodsId:4,goodsName:'枪械-AK47'}], comboStartDate: '2026-05-01', comboEndDate: '2026-11-30', purchaseLimit: 3, showSales: 28, stockAlert: 2, stock: 8, sales: 28, status: '上架', spec: '', specIntro: '', goodsDesc: '', bannerImg: null },
-  { id: 13, name: '战争雷霆入门包', subTitle: '', gameCategoryId: 1, goodsType: 'combo', version: '', platform: '', channels: [], accountType: '', sourceKeyType: '', goodsCategory: '', subCategory: '', supplierId: 3, supplierName: '新巢科技', sort: 13, rmbPrice: 200.00, rmbOriginPrice: 300.00, currencies: [{currencyType:'NB',sellPrice:'2000',originalPrice:'3000'},{currencyType:'LS',sellPrice:'200',originalPrice:'300'}], nCoinPrice: 2000, lsCoinPrice: 200, comboGoods: [{goodsId:1,goodsName:'战争雷霆150金鹰币'}], comboStartDate: '2026-06-15', comboEndDate: '2026-09-15', purchaseLimit: 5, showSales: 15, stockAlert: 5, stock: 30, sales: 15, status: '下架', spec: '', specIntro: '', goodsDesc: '', bannerImg: null }
+  { id: 11, name: '绝地求生大礼包', subTitle: '', gameCategoryId: 2, goodsType: 'combo', version: '', platform: '', channels: [], accountType: '', sourceKeyType: '', goodsCategory: '', subCategory: '', supplierId: 1, supplierName: '商店自营', sort: 11, rmbPrice: 500.00, rmbOriginPrice: 700.00, currencies: [{currencyType:'NB',sellPrice:'5000',originalPrice:'7000'},{currencyType:'LS',sellPrice:'500',originalPrice:'700'}], nCoinPrice: 5000, lsCoinPrice: 500, comboGoods: [{goodsId:5,goodsName:'绝地求生-豪华版'},{goodsId:9,goodsName:'绝地求生-Ps版'}], comboStartDate: '2026-06-01', comboEndDate: '2026-12-31', purchaseLimit: 1, showSales: 42, stockAlert: 3, stock: 15, sales: 42, status: '启用', spec: '', specIntro: '', goodsDesc: '', bannerImg: null },
+  { id: 12, name: '枪械收藏套装', subTitle: '', gameCategoryId: 2, goodsType: 'combo', version: '', platform: '', channels: [], accountType: '', sourceKeyType: '', goodsCategory: '', subCategory: '', supplierId: 1, supplierName: '商店自营', sort: 12, rmbPrice: 350.00, rmbOriginPrice: 500.00, currencies: [{currencyType:'NB',sellPrice:'3500',originalPrice:'5000'},{currencyType:'LS',sellPrice:'350',originalPrice:'500'}], nCoinPrice: 3500, lsCoinPrice: 350, comboGoods: [{goodsId:2,goodsName:'枪械-莫辛纳甘'},{goodsId:3,goodsName:'枪械-98K'},{goodsId:4,goodsName:'枪械-AK47'}], comboStartDate: '2026-05-01', comboEndDate: '2026-11-30', purchaseLimit: 3, showSales: 28, stockAlert: 2, stock: 8, sales: 28, status: '启用', spec: '', specIntro: '', goodsDesc: '', bannerImg: null },
+  { id: 13, name: '战争雷霆入门包', subTitle: '', gameCategoryId: 1, goodsType: 'combo', version: '', platform: '', channels: [], accountType: '', sourceKeyType: '', goodsCategory: '', subCategory: '', supplierId: 3, supplierName: '新巢科技', sort: 13, rmbPrice: 200.00, rmbOriginPrice: 300.00, currencies: [{currencyType:'NB',sellPrice:'2000',originalPrice:'3000'},{currencyType:'LS',sellPrice:'200',originalPrice:'300'}], nCoinPrice: 2000, lsCoinPrice: 200, comboGoods: [{goodsId:1,goodsName:'战争雷霆150金鹰币'}], comboStartDate: '2026-06-15', comboEndDate: '2026-09-15', purchaseLimit: 5, showSales: 15, stockAlert: 5, stock: 30, sales: 15, status: '禁用', spec: '', specIntro: '', goodsDesc: '', bannerImg: null },
+  // 覆盖全部6种状态的组合商品
+  { id: 14, name: '暑假狂欢套餐', subTitle: '', gameCategoryId: 2, goodsType: 'combo', version: '', platform: '', channels: [], accountType: '', sourceKeyType: '', goodsCategory: '', subCategory: '', supplierId: 1, supplierName: '商店自营', sort: 14, rmbPrice: 399.00, rmbOriginPrice: 599.00, currencies: [{currencyType:'NB',sellPrice:'3990',originalPrice:'5990'},{currencyType:'LS',sellPrice:'399',originalPrice:'599'}], nCoinPrice: 3990, lsCoinPrice: 399, comboGoods: [{goodsId:8,goodsName:'绝地求生-排位竞技'},{goodsId:10,goodsName:'绝地求生-Xbox版'}], comboStartDate: '2026-08-01', comboEndDate: '2026-12-31', purchaseLimit: 2, showSales: 0, stockAlert: 3, stock: 50, sales: 0, status: '启用', spec: '', specIntro: '', goodsDesc: '', bannerImg: null },
+  { id: 15, name: '元旦限定礼包', subTitle: '', gameCategoryId: 1, goodsType: 'combo', version: '', platform: '', channels: [], accountType: '', sourceKeyType: '', goodsCategory: '', subCategory: '', supplierId: 3, supplierName: '新巢科技', sort: 15, rmbPrice: 288.00, rmbOriginPrice: 388.00, currencies: [{currencyType:'NB',sellPrice:'2880',originalPrice:'3880'},{currencyType:'LS',sellPrice:'288',originalPrice:'388'}], nCoinPrice: 2880, lsCoinPrice: 288, comboGoods: [{goodsId:1,goodsName:'战争雷霆150金鹰币'},{goodsId:6,goodsName:'台湾mycard点数50'}], comboStartDate: '2026-01-01', comboEndDate: '2026-01-31', purchaseLimit: 1, showSales: 89, stockAlert: 5, stock: 0, sales: 89, status: '启用', spec: '', specIntro: '', goodsDesc: '', bannerImg: null },
+  { id: 16, name: '春季特惠组合', subTitle: '', gameCategoryId: 4, goodsType: 'combo', version: '', platform: '', channels: [], accountType: '', sourceKeyType: '', goodsCategory: '', subCategory: '', supplierId: 1, supplierName: '商店自营', sort: 16, rmbPrice: 168.00, rmbOriginPrice: 258.00, currencies: [{currencyType:'NB',sellPrice:'1680',originalPrice:'2580'},{currencyType:'LS',sellPrice:'168',originalPrice:'258'}], nCoinPrice: 1680, lsCoinPrice: 168, comboGoods: [{goodsId:7,goodsName:'完蛋!我也能追到美女了!-DLC'}], comboStartDate: '2026-03-01', comboEndDate: '2026-04-30', purchaseLimit: 5, showSales: 156, stockAlert: 10, stock: 0, sales: 156, status: '禁用', spec: '', specIntro: '', goodsDesc: '', bannerImg: null },
+  { id: 17, name: 'MyCard超值包', subTitle: '', gameCategoryId: 3, goodsType: 'combo', version: '', platform: '', channels: [], accountType: '', sourceKeyType: '', goodsCategory: '', subCategory: '', supplierId: 3, supplierName: '新巢科技', sort: 17, rmbPrice: 120.00, rmbOriginPrice: 180.00, currencies: [{currencyType:'NB',sellPrice:'1200',originalPrice:'1800'},{currencyType:'LS',sellPrice:'120',originalPrice:'180'}], nCoinPrice: 1200, lsCoinPrice: 120, comboGoods: [{goodsId:6,goodsName:'台湾mycard点数50'}], comboStartDate: '2026-09-01', comboEndDate: '2026-10-31', purchaseLimit: 10, showSales: 0, stockAlert: 5, stock: 100, sales: 0, status: '禁用', spec: '', specIntro: '', goodsDesc: '', bannerImg: null }
 ];
-var mallGoodsNextId = 14;
+var mallGoodsNextId = 18;
 var mallGoodsEditingId = null;
 var mallGoodsFilterName = '';
 var mallGoodsFilterStatus = '';
@@ -355,17 +360,17 @@ var gameCategoryMap = { 1: '战争雷霆', 2: '绝地求生', 3: 'MyCard', 4: '�
 function getGameCategoryName(id) { return gameCategoryMap[id] || id; }
 
 var promotions = [
-  { id: 1, name: '暑期促销活动', supplierIds: [1], goodsIds: [33, 14], supplierNames: '商店自营', goodsNames: '战争雷霆150金鹰币, 枪械-98K', discount: '9.0折', startDate: '2026-06-01T00:00', endDate: '2026-07-31T00:00', createTime: '2026-06-01 10:30:00', status: '启用' },
-  { id: 2, name: '新巢科技专享', supplierIds: [3], goodsIds: [29], supplierNames: '新巢科技', goodsNames: '台湾mycard点数50', discount: '8.5折', startDate: '2026-05-15T00:00', endDate: '2026-08-15T00:00', createTime: '2026-05-10 14:20:00', status: '启用' },
-  { id: 3, name: '国庆大促', supplierIds: [1], goodsIds: [13, 19], supplierNames: '商店自营', goodsNames: '枪械-AK47, 绝地求生-Xbox版', discount: '7.5折', startDate: '2026-09-01T00:00', endDate: '2026-10-07T00:00', createTime: '2026-05-20 09:00:00', status: '启用' },
-  { id: 4, name: '双十一预热', supplierIds: [1], goodsIds: [14, 17], supplierNames: '商店自营', goodsNames: '枪械-98K, 枪械-莫辛纳甘', discount: '8.0折', startDate: '2026-11-01T00:00', endDate: '2026-11-11T00:00', createTime: '2026-06-01 11:00:00', status: '启用' },
-  { id: 5, name: '春节特惠', supplierIds: [1], goodsIds: [33, 21], supplierNames: '商店自营', goodsNames: '战争雷霆150金鹰币, 完蛋!我也能追到美女了!-2', discount: '8.8折', startDate: '2026-01-25T00:00', endDate: '2026-02-05T00:00', createTime: '2026-01-20 08:00:00', status: '启用' },
-  { id: 6, name: '女神节活动', supplierIds: [3], goodsIds: [29], supplierNames: '新巢科技', goodsNames: '台湾mycard点数50', discount: '9.0折', startDate: '2026-03-01T00:00', endDate: '2026-03-08T00:00', createTime: '2026-02-25 16:00:00', status: '启用' },
-  { id: 7, name: '圣诞季推广', supplierIds: [1], goodsIds: [18, 11], supplierNames: '商店自营', goodsNames: '绝地求生-Ps版, 绝地求生-豪华版', discount: '7.0折', startDate: '2026-12-20T00:00', endDate: '2026-12-31T00:00', createTime: '2026-05-15 10:00:00', status: '禁用' },
-  { id: 8, name: '新巢春季特惠', supplierIds: [3], goodsIds: [29], supplierNames: '新巢科技', goodsNames: '台湾mycard点数50', discount: '9.0折', startDate: '2026-04-01T00:00', endDate: '2026-06-30T00:00', createTime: '2026-03-28 09:00:00', status: '禁用' },
-  { id: 9, name: '年中大促', supplierIds: [1], goodsIds: [13, 19, 22], supplierNames: '商店自营', goodsNames: '枪械-AK47, 绝地求生-Xbox版, 完蛋!我也能追到美女了!-DLC', discount: '6.5折', startDate: '2026-06-01T00:00', endDate: '2026-06-30T00:00', createTime: '2026-05-28 13:00:00', status: '禁用' },
-  { id: 10, name: '元旦促销', supplierIds: [3], goodsIds: [29], supplierNames: '新巢科技', goodsNames: '台湾mycard点数50', discount: '8.0折', startDate: '2025-12-28T00:00', endDate: '2026-01-03T00:00', createTime: '2025-12-25 10:00:00', status: '禁用' },
-  { id: 11, name: '劳动节特卖', supplierIds: [1], goodsIds: [33], supplierNames: '商店自营', goodsNames: '战争雷霆150金鹰币', discount: '7.5折', startDate: '2026-04-28T00:00', endDate: '2026-05-05T00:00', createTime: '2026-04-25 09:30:00', status: '禁用' }
+  { id: 1, name: '暑期促销活动', supplierIds: [1], goodsIds: [33, 14], supplierNames: '商店自营', goodsNames: '战争雷霆150金鹰币, 枪械-98K', discount: '9.0折', startDate: '2026-06-01T00:00', endDate: '2026-07-31T00:00', createTime: '2026-06-01 10:30:00', costRelated: '是', status: '启用' },
+  { id: 2, name: '新巢科技专享', supplierIds: [3], goodsIds: [29], supplierNames: '新巢科技', goodsNames: '台湾mycard点数50', discount: '8.5折', startDate: '2026-05-15T00:00', endDate: '2026-08-15T00:00', createTime: '2026-05-10 14:20:00', costRelated: '否', status: '启用' },
+  { id: 3, name: '国庆大促', supplierIds: [1], goodsIds: [13, 19], supplierNames: '商店自营', goodsNames: '枪械-AK47, 绝地求生-Xbox版', discount: '7.5折', startDate: '2026-09-01T00:00', endDate: '2026-10-07T00:00', createTime: '2026-05-20 09:00:00', costRelated: '是', status: '启用' },
+  { id: 4, name: '双十一预热', supplierIds: [1], goodsIds: [14, 17], supplierNames: '商店自营', goodsNames: '枪械-98K, 枪械-莫辛纳甘', discount: '8.0折', startDate: '2026-11-01T00:00', endDate: '2026-11-11T00:00', createTime: '2026-06-01 11:00:00', costRelated: '否', status: '启用' },
+  { id: 5, name: '春节特惠', supplierIds: [1], goodsIds: [33, 21], supplierNames: '商店自营', goodsNames: '战争雷霆150金鹰币, 完蛋!我也能追到美女了!-2', discount: '8.8折', startDate: '2026-01-25T00:00', endDate: '2026-02-05T00:00', createTime: '2026-01-20 08:00:00', costRelated: '是', status: '启用' },
+  { id: 6, name: '女神节活动', supplierIds: [3], goodsIds: [29], supplierNames: '新巢科技', goodsNames: '台湾mycard点数50', discount: '9.0折', startDate: '2026-03-01T00:00', endDate: '2026-03-08T00:00', createTime: '2026-02-25 16:00:00', costRelated: '否', status: '启用' },
+  { id: 7, name: '圣诞季推广', supplierIds: [1], goodsIds: [18, 11], supplierNames: '商店自营', goodsNames: '绝地求生-Ps版, 绝地求生-豪华版', discount: '7.0折', startDate: '2026-12-20T00:00', endDate: '2026-12-31T00:00', createTime: '2026-05-15 10:00:00', costRelated: '是', status: '禁用' },
+  { id: 8, name: '新巢春季特惠', supplierIds: [3], goodsIds: [29], supplierNames: '新巢科技', goodsNames: '台湾mycard点数50', discount: '9.0折', startDate: '2026-04-01T00:00', endDate: '2026-06-30T00:00', createTime: '2026-03-28 09:00:00', costRelated: '否', status: '禁用' },
+  { id: 9, name: '年中大促', supplierIds: [1], goodsIds: [13, 19, 22], supplierNames: '商店自营', goodsNames: '枪械-AK47, 绝地求生-Xbox版, 完蛋!我也能追到美女了!-DLC', discount: '6.5折', startDate: '2026-06-01T00:00', endDate: '2026-06-30T00:00', createTime: '2026-05-28 13:00:00', costRelated: '是', status: '禁用' },
+  { id: 10, name: '元旦促销', supplierIds: [3], goodsIds: [29], supplierNames: '新巢科技', goodsNames: '台湾mycard点数50', discount: '8.0折', startDate: '2025-12-28T00:00', endDate: '2026-01-03T00:00', createTime: '2025-12-25 10:00:00', costRelated: '否', status: '禁用' },
+  { id: 11, name: '劳动节特卖', supplierIds: [1], goodsIds: [33], supplierNames: '商店自营', goodsNames: '战争雷霆150金鹰币', discount: '7.5折', startDate: '2026-04-28T00:00', endDate: '2026-05-05T00:00', createTime: '2026-04-25 09:30:00', costRelated: '否', status: '禁用' }
 ];
 var promoNextId = 12;
 var editingPromoId = null;
@@ -533,6 +538,10 @@ function openPromoModal(promoId) {
   document.getElementById('promoEndDate').value = record ? record.endDate : '';
   document.getElementById('promoDiscount').value = record ? (record.discount || '') : '';
 
+  var costRadios = document.getElementsByName('promoCostRelated');
+  var costVal = record ? (record.costRelated || '否') : '否';
+  for (var cr = 0; cr < costRadios.length; cr++) { costRadios[cr].checked = (costRadios[cr].value === costVal); }
+
   var radios = document.getElementsByName('promoStatus');
   var statusVal = record ? record.status : '启用';
   for (var r = 0; r < radios.length; r++) { radios[r].checked = (radios[r].value === statusVal); }
@@ -579,9 +588,14 @@ function savePromotion() {
   var startDate = document.getElementById('promoStartDate').value;
   var endDate = document.getElementById('promoEndDate').value;
   var discount = document.getElementById('promoDiscount').value;
+  var costRelatedVal = '否';
+  var costRadios2 = document.getElementsByName('promoCostRelated');
+  for (var cr2 = 0; cr2 < costRadios2.length; cr2++) { if (costRadios2[cr2].checked) costRelatedVal = costRadios2[cr2].value; }
   if (!startDate) { showToast('请选择开始时间'); return; }
   if (!endDate) { showToast('请选择结束时间'); return; }
   if (endDate < startDate) { showToast('结束时间不能早于开始时间'); return; }
+  if (!discount) { showToast('请输入折扣'); return; }
+  if (!costRelatedVal) { showToast('请选择关联成本价'); return; }
 
   var statusVal = '启用';
   var radios = document.getElementsByName('promoStatus');
@@ -600,6 +614,7 @@ function savePromotion() {
         promotions[e].discount = discount;
         promotions[e].startDate = startDate;
         promotions[e].endDate = endDate;
+        promotions[e].costRelated = costRelatedVal;
         promotions[e].status = statusVal;
         break;
       }
@@ -608,7 +623,7 @@ function savePromotion() {
     promotions.push({
       id: promoNextId++, name: promoName, supplierIds: supplierIds, goodsIds: goodsIds,
       supplierNames: supplierNames.join(', '), goodsNames: goodsNames.join(', '),
-      discount: discount, startDate: startDate, endDate: endDate, createTime: createTime, status: statusVal
+      discount: discount, costRelated: costRelatedVal, startDate: startDate, endDate: endDate, createTime: createTime, status: statusVal
     });
   }
 
@@ -646,6 +661,17 @@ function refreshPromotions() {
   showToast('活动数据已刷新');
 }
 
+function togglePromoStatus(promoId) {
+  for (var i = 0; i < promotions.length; i++) {
+    if (promotions[i].id === promoId) {
+      promotions[i].status = promotions[i].status === '启用' ? '禁用' : '启用';
+      showToast('活动「' + promotions[i].name + '」已' + promotions[i].status);
+      break;
+    }
+  }
+  renderPromoTable();
+}
+
 function renderPromoTable(filterText, filterStart, filterEnd, filterStatus) {
   var filtered = promotions.slice();
   if (filterText) { filtered = filtered.filter(function(p) { return p.supplierNames.indexOf(filterText) > -1 || p.goodsNames.indexOf(filterText) > -1; }); }
@@ -655,26 +681,32 @@ function renderPromoTable(filterText, filterStart, filterEnd, filterStatus) {
 
   var tbody = document.getElementById('promoTableBody');
   if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="11" style="padding:40px;color:#999;">暂无数据</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" style="padding:40px;color:#999;">暂无数据</td></tr>';
   } else {
     var html = '';
     for (var i = 0; i < filtered.length; i++) {
       var p = filtered[i];
       html += '<tr>';
-      html += '<td>' + p.id + '</td>';
+      html += '<td style="text-align:center;">' + p.id + '</td>';
       var now2 = new Date();
       var endDt = p.endDate ? new Date(p.endDate) : null;
       var canEdit = !endDt || endDt >= now2;
-      html += '<td class="table-actions">' + (canEdit ? '<a onclick="openPromoModal(' + p.id + ')">编辑</a>' : '') + '</td>';
+	      html += '<td class="table-actions">';
+	      if (canEdit) {
+	        html += '<a onclick="openPromoModal(' + p.id + ')">编辑</a>';
+	        html += '<span class="divider">|</span>';
+	        html += '<a onclick="togglePromoStatus(' + p.id + ')">' + (p.status === '启用' ? '禁用' : '启用') + '</a>';
+	      }
+	      html += '</td>';
       html += '<td>' + (p.name || '') + '</td>';
       html += '<td>' + p.supplierNames + '</td>';
-      html += '<td>' + p.goodsNames + '</td>';
-      html += '<td>' + (p.discount || '-') + '</td>';
-      html += '<td>' + (p.startDate ? p.startDate.replace('T', ' ') : '') + '</td>';
-      html += '<td>' + (p.endDate ? p.endDate.replace('T', ' ') : '') + '</td>';
-      html += '<td>' + p.createTime + '</td>';
+      html += '<td title="' + p.goodsNames + '">' + (p.goodsNames.length > 18 ? p.goodsNames.substring(0, 18) + '…' : p.goodsNames) + '</td>';
+      html += '<td style="text-align:center;">' + (p.discount || '-') + '</td>';
+      html += '<td style="text-align:center;">' + (p.costRelated || '否') + '</td>';
+      html += '<td>' + (p.startDate ? p.startDate.replace('T', ' ').substring(0, 10) : '') + ' ~ ' + (p.endDate ? p.endDate.replace('T', ' ').substring(0, 10) : '') + '</td>';
+	      html += '<td>' + (p.createTime ? p.createTime.substring(0, 16) : '') + '</td>';
       var ds = getPromoDisplayStatus(p);
-      html += '<td><span class="tag ' + getStatusTagClass(ds) + '">' + ds + '</span></td>';
+      html += '<td style="text-align:center;"><span class="tag ' + getStatusTagClass(ds) + '">' + ds + '</span></td>';
       html += '</tr>';
     }
     tbody.innerHTML = html;
@@ -706,12 +738,66 @@ function resetPromoFilter() {
 }
 
 // ===== 商品管理（商品流水） =====
+
+function getGoodsDisplayStatus(g) {
+  // 独立商品：直接返回上架/下架
+  if (g.goodsType !== 'combo') return g.status === '上架' ? '上架' : '下架';
+  // 组合商品：与活动一致的时间判定逻辑
+  var now = new Date();
+  var start = g.comboStartDate ? new Date(g.comboStartDate) : null;
+  var end = g.comboEndDate ? new Date(g.comboEndDate) : null;
+  if (g.status === '启用') {
+    if (start && now < start) return '待执行';
+    if (start && end && now >= start && now <= end) return '执行中';
+    if (end && now > end) return '已完成';
+    return '执行中';
+  } else {
+    if (start && end && now >= start && now <= end) return '已暂停';
+    if (end && now > end) return '已过期';
+    return '禁用';
+  }
+}
+
+function getGoodsStatusTagClass(status) {
+  if (status === '上架' || status === '执行中') return 'tag-success';
+  if (status === '待执行') return 'tag-blue';
+  if (status === '已完成') return 'tag-default';
+  if (status === '已暂停') return 'tag-warning';
+  if (status === '已过期') return 'tag-error';
+  if (status === '下架') return 'tag-default';
+  return 'tag-default';
+}
+
 function onMallGoodsTypeChange() {
   var radios = document.getElementsByName('mallGoodsFilterType');
   for (var i = 0; i < radios.length; i++) { if (radios[i].checked) mallGoodsFilterType = radios[i].value; }
   mallGoodsCurrentPage = 0;
-  renderMallGoodsTable(mallGoodsFilterName, mallGoodsFilterStatus, 0);
+  mallGoodsFilterStatus = '';
+  populateMallGoodsStatusDropdown();
+  renderMallGoodsTable(mallGoodsFilterName, '', 0);
 }
+function populateMallGoodsStatusDropdown() {
+  var select = document.getElementById('mallGoodsFilterStatus');
+  if (!select) return;
+  var options = [{value: '', text: '全部'}];
+  if (mallGoodsFilterType === 'independent') {
+    options.push({value: '上架', text: '上架'});
+    options.push({value: '下架', text: '下架'});
+  } else {
+    options.push({value: '待执行', text: '待执行'});
+    options.push({value: '执行中', text: '执行中'});
+    options.push({value: '已完成', text: '已完成'});
+    options.push({value: '禁用', text: '禁用'});
+    options.push({value: '已暂停', text: '已暂停'});
+    options.push({value: '已过期', text: '已过期'});
+  }
+  var html = '';
+  for (var i = 0; i < options.length; i++) {
+    html += '<option value="' + options[i].value + '">' + options[i].text + '</option>';
+  }
+  select.innerHTML = html;
+}
+
 
 function renderMallGoodsTableHeader() {
   var thead = document.getElementById('mallGoodsTableHead');
@@ -766,7 +852,7 @@ function renderMallGoodsTable(filterName, filterStatus, pageNum) {
     filtered = filtered.filter(function(g) { return g.goodsType === 'combo'; });
   }
   if (filterName) { filtered = filtered.filter(function(g) { return g.name.indexOf(filterName) > -1; }); }
-  if (filterStatus) { filtered = filtered.filter(function(g) { return g.status === filterStatus; }); }
+  if (filterStatus) { filtered = filtered.filter(function(g) { return getGoodsDisplayStatus(g) === filterStatus; }); }
 
   var totalCount = filtered.length;
   var totalPages = Math.ceil(totalCount / mallGoodsPageSize) || 1;
@@ -789,12 +875,19 @@ function renderMallGoodsTable(filterName, filterStatus, pageNum) {
     var html = '';
     for (var i = 0; i < pageData.length; i++) {
       var g = pageData[i];
-      var statusTag = g.status === '上架' ? '<span class="tag tag-success">上架</span>' : '<span class="tag tag-default">下架</span>';
+      var ds = getGoodsDisplayStatus(g);
+      var statusTag = '<span class="tag ' + getGoodsStatusTagClass(ds) + '">' + ds + '</span>';
       html += '<tr>';
       html += '<td class="table-actions">';
-      html += '<a onclick="openTab(\'mallGoodsAdd\', \'商品编辑\'); setTimeout(function(){ fillMallGoodsForm(' + g.id + '); }, 50);">编辑</a>';
-      html += '<span class="divider">|</span>';
-      html += '<a onclick="toggleMallGoodsStatus(' + g.id + ')">' + (g.status === '上架' ? '下架' : '上架') + '</a>';
+      var isCombo2 = g.goodsType === 'combo';
+      if (!isCombo2) {
+        html += '<a onclick="openTab(\'mallGoodsAdd\', \'商品编辑\'); setTimeout(function(){ fillMallGoodsForm(' + g.id + '); }, 50);">编辑</a>';
+        html += '<span class="divider">|</span>';
+      } else {
+        html += '<a onclick="copyMallGoods(' + g.id + ')">复制</a>';
+        html += '<span class="divider">|</span>';
+      }
+      html += '<a onclick="toggleMallGoodsStatus(' + g.id + ')">' + (g.status === '上架' ? '下架' : g.status === '启用' ? '禁用' : g.status === '下架' ? '上架' : '启用') + '</a>';
       html += '</td>';
       html += '<td>' + g.id + '</td><td>' + g.name + '</td><td>' + getGameCategoryName(g.gameCategoryId) + '</td>';
       if (mallGoodsFilterType === 'independent') {
@@ -849,11 +942,47 @@ function resetMallGoodsFilter() {
 function toggleMallGoodsStatus(goodsId) {
   for (var i = 0; i < mallGoods.length; i++) {
     if (mallGoods[i].id === goodsId) {
-      mallGoods[i].status = mallGoods[i].status === '上架' ? '下架' : '上架';
+      mallGoods[i].status = mallGoods[i].status === '上架' ? '下架' : mallGoods[i].status === '启用' ? '禁用' : mallGoods[i].status === '下架' ? '上架' : '启用';
       showToast('商品「' + mallGoods[i].name + '」已' + mallGoods[i].status);
       break;
     }
   }
+  renderMallGoodsTable(mallGoodsFilterName, mallGoodsFilterStatus, mallGoodsCurrentPage);
+}
+
+function copyMallGoods(goodsId) {
+  var source = null;
+  for (var i = 0; i < mallGoods.length; i++) {
+    if (mallGoods[i].id === goodsId) { source = mallGoods[i]; break; }
+  }
+  if (!source) return;
+  var copy = {};
+  for (var key in source) { copy[key] = source[key]; }
+  if (source.comboGoods) {
+    copy.comboGoods = [];
+    for (var c = 0; c < source.comboGoods.length; c++) {
+      copy.comboGoods.push({ goodsId: source.comboGoods[c].goodsId, goodsName: source.comboGoods[c].goodsName });
+    }
+  }
+  if (source.currencies) {
+    copy.currencies = [];
+    for (var cu = 0; cu < source.currencies.length; cu++) {
+      copy.currencies.push({ currencyType: source.currencies[cu].currencyType, sellPrice: source.currencies[cu].sellPrice, originalPrice: source.currencies[cu].originalPrice });
+    }
+  }
+  if (source.channels) {
+    copy.channels = [];
+    for (var ch = 0; ch < source.channels.length; ch++) {
+      copy.channels.push({ channelName: source.channels[ch].channelName, channelGameId: source.channels[ch].channelGameId });
+    }
+  }
+  copy.id = mallGoodsNextId++;
+  copy.name = (source.name || '') + '（复制）';
+  copy.stock = 0;
+  copy.sales = 0;
+  copy.status = '禁用';
+  mallGoods.push(copy);
+  showToast('商品「' + source.name + '」已复制');
   renderMallGoodsTable(mallGoodsFilterName, mallGoodsFilterStatus, mallGoodsCurrentPage);
 }
 
